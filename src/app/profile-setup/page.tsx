@@ -13,6 +13,7 @@ import {
   Typography,
 } from "@heroui/react";
 import { OnboardingScreen } from "@/components/onboarding/screen";
+import { Hydrated } from "@/components/app/hydrated";
 import { useUserState } from "@/hooks/use-user-state";
 import { IconCamera } from "@/components/icons";
 
@@ -27,7 +28,7 @@ const AREAS = [
   "Bo-Kaap",
 ];
 
-export default function ProfileSetupPage() {
+function ProfileSetupScreen() {
   const router = useRouter();
   const [state, update] = useUserState();
   const [name, setName] = useState(state.name);
@@ -113,5 +114,13 @@ export default function ProfileSetupPage() {
         </div>
       </div>
     </OnboardingScreen>
+  );
+}
+
+export default function ProfileSetupPage() {
+  return (
+    <Hydrated>
+      <ProfileSetupScreen />
+    </Hydrated>
   );
 }

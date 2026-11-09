@@ -1,7 +1,7 @@
 "use client";
 
-import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { Suspense, useState } from "react";
 import {
   Button,
   Description,
@@ -12,6 +12,7 @@ import {
   Typography,
 } from "@heroui/react";
 import { OnboardingScreen } from "@/components/onboarding/screen";
+import { Hydrated } from "@/components/app/hydrated";
 import { useUserState } from "@/hooks/use-user-state";
 import type { NotificationPreferences } from "@/types";
 
@@ -49,8 +50,9 @@ function NotificationRow({
   );
 }
 
-export default function NotificationsPage() {
+function NotificationsScreen() {
   const router = useRouter();
+  const fromProfile = useSearchParams().get("from") === "profile";
   const [state, update] = useUserState();
   const [prefs, setPrefs] = useState<NotificationPreferences>(
     state.notifications
@@ -64,17 +66,17 @@ export default function NotificationsPage() {
   }
 
   function save() {
-    update({ notifications: prefs });
-    router.push("/all-set");
+    update({ notifications: prefs, onboardingComplete: true });
+    router.push(fromProfile ? "/profile" : "/all-set");
   }
 
   return (
     <OnboardingScreen
       back
-      backHref="/follow-masjids"
+      backHref={fromProfile ? "/profile" : "/follow-masjids"}
       footer={
         <Button variant="primary" size="lg" fullWidth onPress={save}>
-          Save and continue
+          {fromProfile ? "Save" : "Save and continue"}
         </Button>
       }
     >
@@ -154,5 +156,15 @@ export default function NotificationsPage() {
         </div>
       </div>
     </OnboardingScreen>
+  );
+}
+
+export default function NotificationsPage() {
+  return (
+    <Suspense fallback={null}>
+      <Hydrated>
+        <NotificationsScreen />
+      </Hydrated>
+    </Suspense>
   );
 }

@@ -4,8 +4,10 @@ import { useParams } from "next/navigation";
 import { useState } from "react";
 import { Tabs } from "@heroui/react";
 import { OnboardingScreen } from "@/components/onboarding/screen";
+import { useUserState } from "@/hooks/use-user-state";
 import { getMasjid } from "@/services/masjids";
 import {
+  applyJamaatEdits,
   jamaatWeekQuds,
   jamaatWeekQudsNext,
   jumuahNote,
@@ -18,13 +20,17 @@ const PRAYER_KEYS = ["fajr", "dhuhr", "asr", "maghrib", "isha"] as const;
 
 export default function JamaatWeekPage() {
   const params = useParams<{ id: string }>();
+  const [state] = useUserState();
   const [week, setWeek] = useState<"this" | "next">("this");
 
   // Mock: only Masjidul Quds has week data; other ids fall back to it.
   const masjid = getMasjid(params.id) ?? getMasjid("masjidul-quds");
   if (!masjid) return null;
 
-  const data: JamaatWeek = week === "this" ? jamaatWeekQuds : jamaatWeekQudsNext;
+  const data: JamaatWeek =
+    week === "this" && masjid.id === (state.followedMasjidIds[0] ?? "masjidul-quds")
+      ? applyJamaatEdits(jamaatWeekQuds, state.jamaatEdits, state.jamaatEditsWholeWeek)
+      : jamaatWeekQudsNext;
   const changedCount = data.days.filter((d) => d.delta).length;
 
   return (

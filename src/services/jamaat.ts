@@ -1,3 +1,5 @@
+import type { PrayerId } from "@/types";
+
 // Mock jamaat week data until Supabase + PostGIS exist (SETUP.md §10).
 
 export type JamaatWeek = {
@@ -45,3 +47,40 @@ export const jamaatWeekQudsNext: JamaatWeek = {
 
 /** Friday Dhuhr note, per the spec */
 export const jumuahNote = "Friday Dhuhr is Jumuʿah — 12:45, khutbah in English.";
+
+const KEYS = ["fajr", "dhuhr", "asr", "maghrib", "isha"] as const;
+
+export function toMinutes(time: string): number {
+  const [h, m] = time.split(":").map(Number);
+  return h * 60 + m;
+}
+
+/** Layer an admin's published edits over the mock week. Mock "today" is Thu 3. */
+export function applyJamaatEdits(
+  week: JamaatWeek,
+  edits: Partial<Record<PrayerId, string>>,
+  wholeWeek: boolean
+): JamaatWeek {
+  if (Object.keys(edits).length === 0) return week;
+  return {
+    ...week,
+    days: week.days.map((day) => {
+      if (!wholeWeek && day.date !== 3) return day;
+      const next = { ...day };
+      let delta = day.delta;
+      KEYS.forEach((key, index) => {
+        const edit = edits[key];
+        const isFriday = day.day.startsWith("Fri");
+        const value = key === "dhuhr" && isFriday ? edits.jumuah : edit;
+        if (value && value !== day[key]) {
+          delta = {
+            prayer: index as 0 | 1 | 2 | 3 | 4,
+            minutes: toMinutes(value) - toMinutes(day[key]),
+          };
+          next[key] = value;
+        }
+      });
+      return { ...next, delta };
+    }),
+  };
+}

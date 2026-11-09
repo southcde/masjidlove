@@ -26,7 +26,7 @@ export default function EventDetailPage() {
   const params = useParams<{ id: string }>();
   const [state, , { setRsvp }] = useUserState();
 
-  const event = getEvent(params.id);
+  const event = getEvent(params.id, state.customEvents);
   if (!event) {
     return (
       <main className="flex flex-1 flex-col items-center justify-center gap-4 p-6">
@@ -115,7 +115,7 @@ export default function EventDetailPage() {
 
         <div className="flex items-center gap-3.5 pb-4">
           <div className="flex">
-            {["YA", "RM", "FS"].map((initials, index) => (
+            {["YA", "RM", "FS"].slice(0, event.goingCount).map((initials, index) => (
               <Avatar
                 key={initials}
                 className={`h-[38px] w-[38px] ${index > 0 ? "-ml-[11px]" : ""}`}
@@ -125,12 +125,13 @@ export default function EventDetailPage() {
                 </AvatarFallback>
               </Avatar>
             ))}
+            {event.goingCount > 3 && (
             <Avatar className="-ml-[11px] h-[38px] w-[38px]">
               <AvatarFallback className="border-[2.5px] border-background bg-accent-soft text-[12.5px] font-bold text-accent-soft-foreground">
-                +
-                {event.goingCount - 3}
+                +{event.goingCount - 3}
               </AvatarFallback>
             </Avatar>
+            )}
           </div>
           <span className="text-[14.5px] text-muted">
             {event.goingCount} going, {event.maybeCount} maybe

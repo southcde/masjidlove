@@ -97,6 +97,8 @@ body {
   /* dvh, never vh — 100vh is wrong in mobile Safari */
   min-height: 100dvh;
   overscroll-behavior: none;
+  background: var(--background);
+  color: var(--foreground);
 }
 
 /* user-select: none on interactive chrome only, never on content */

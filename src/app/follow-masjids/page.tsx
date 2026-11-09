@@ -9,6 +9,7 @@ import {
   Typography,
 } from "@heroui/react";
 import { OnboardingScreen } from "@/components/onboarding/screen";
+import { Hydrated } from "@/components/app/hydrated";
 import { useUserState } from "@/hooks/use-user-state";
 import { formatDistance, listMasjids } from "@/services/masjids";
 import {
@@ -16,7 +17,7 @@ import {
   IconCheck,
 } from "@/components/icons";
 
-export default function FollowMasjidsPage() {
+function FollowMasjidsScreen() {
   const router = useRouter();
   const [state, update] = useUserState();
   const [query, setQuery] = useState("");
@@ -190,5 +191,13 @@ export default function FollowMasjidsPage() {
         </div>
       </div>
     </OnboardingScreen>
+  );
+}
+
+export default function FollowMasjidsPage() {
+  return (
+    <Hydrated>
+      <FollowMasjidsScreen />
+    </Hydrated>
   );
 }

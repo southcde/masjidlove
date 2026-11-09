@@ -87,11 +87,11 @@ export default function ContinueWithPage() {
       <footer className="flex-none px-6 pb-6">
         <Typography.Paragraph size="xs" className="text-center text-muted">
           By continuing you agree to the{" "}
-          <Link href="/" className="text-link">
+          <Link href="/terms" className="text-link">
             terms
           </Link>{" "}
           and{" "}
-          <Link href="/" className="text-link">
+          <Link href="/privacy" className="text-link">
             privacy notice
           </Link>
           .

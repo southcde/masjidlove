@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { defaultUserState, type Rsvp, type UserState } from "@/types";
 
 const STORAGE_KEY = "masjidlove.user";
@@ -27,29 +27,35 @@ export function useUserState(): [
   {
     setRsvp: (eventId: string, rsvp: Rsvp | null) => void;
     toggleSaved: (masjidId: string) => void;
+    /** False until localStorage has been read on the client */
+    hydrated: boolean;
   },
 ] {
-  const [state, setState] = useState<UserState>(() => {
-    const migrated =
-      typeof window !== "undefined"
-        ? window.localStorage.getItem("masjidlove.onboarding")
-        : null;
-    const base = read();
-    if (migrated && base === defaultUserState) {
-      try {
-        return {
-          ...defaultUserState,
-          ...JSON.parse(migrated),
-          savedMasjidIds: [],
-          rsvps: {},
-          onboardingComplete: true,
-        };
-      } catch {
-        return base;
+  // Start from the default so the server and first client render agree;
+  // the stored state is applied right after mount.
+  const [state, setState] = useState<UserState>(defaultUserState);
+  const [hydrated, setHydrated] = useState(false);
+
+  useEffect(() => {
+    let next = read();
+    if (next === defaultUserState) {
+      const migrated = window.localStorage.getItem("masjidlove.onboarding");
+      if (migrated) {
+        try {
+          next = {
+            ...defaultUserState,
+            ...JSON.parse(migrated),
+            savedMasjidIds: [],
+            rsvps: {},
+            onboardingComplete: true,
+          };
+        } catch {}
       }
     }
-    return base;
-  });
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- one-time load from storage
+    setState(next);
+    setHydrated(true);
+  }, []);
 
   const update = useCallback((patch: Partial<UserState>) => {
     setState((prev) => {
@@ -95,5 +101,5 @@ export function useUserState(): [
     });
   }, []);
 
-  return [state, update, { setRsvp, toggleSaved }];
+  return [state, update, { setRsvp, toggleSaved, hydrated }];
 }

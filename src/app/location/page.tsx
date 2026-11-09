@@ -3,7 +3,7 @@
 import { useRouter } from "next/navigation";
 import { Button, Typography } from "@heroui/react";
 import { OnboardingScreen } from "@/components/onboarding/screen";
-import { LinkButton } from "@/components/link-button";
+import { useUserState } from "@/hooks/use-user-state";
 import { IconCheck, IconLocate } from "@/components/icons";
 
 const PROMISES = [
@@ -14,17 +14,25 @@ const PROMISES = [
 
 export default function LocationPage() {
   const router = useRouter();
+  const [, update] = useUserState();
 
   function allowLocation() {
     // One-shot request at the point of need — never on load. With no
     // backend yet the result isn't stored; the flow continues either way.
     if ("geolocation" in navigator) {
       navigator.geolocation.getCurrentPosition(
-        () => router.push("/follow-masjids"),
-        () => router.push("/follow-masjids"),
+        () => {
+          update({ locationDenied: false });
+          router.push("/follow-masjids");
+        },
+        () => {
+          update({ locationDenied: true });
+          router.push("/follow-masjids");
+        },
         { timeout: 10_000 }
       );
     } else {
+      update({ locationDenied: true });
       router.push("/follow-masjids");
     }
   }
@@ -44,14 +52,17 @@ export default function LocationPage() {
           >
             Allow location
           </Button>
-          <LinkButton
-            href="/follow-masjids"
+          <Button
             variant="ghost"
             size="lg"
             fullWidth
+            onPress={() => {
+              update({ locationDenied: true });
+              router.push("/follow-masjids");
+            }}
           >
             Not now — I’ll pick by area
-          </LinkButton>
+          </Button>
         </div>
       }
     >

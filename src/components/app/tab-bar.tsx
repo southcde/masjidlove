@@ -18,7 +18,6 @@ const TABS = [
 /**
  * Bottom tab bar. GAPS: the router owns nav chrome — the library has no
  * tab bar. Plain icon + label, active state = --accent, no pill, no FAB.
- * Profile has no screen yet; it renders as a disabled tab.
  */
 export function TabBar({ active }: { active: "home" | "explore" | "events" | "profile" }) {
   return (
@@ -28,18 +27,6 @@ export function TabBar({ active }: { active: "home" | "explore" | "events" | "pr
     >
       {TABS.map(({ href, label, Icon }) => {
         const isActive = href === `/${active}`;
-        if (active === "profile") {
-          return (
-            <span
-              key={href}
-              aria-disabled
-              className="flex h-[62px] flex-1 cursor-not-allowed flex-col items-center justify-center gap-[3px] text-muted opacity-50"
-            >
-              <Icon size={24} />
-              <span className="text-[11.5px]">{label}</span>
-            </span>
-          );
-        }
         return (
           <Link
             key={href}

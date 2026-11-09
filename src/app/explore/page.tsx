@@ -3,6 +3,8 @@
 import { useRouter } from "next/navigation";
 import { useMemo, useState } from "react";
 import {
+  Alert,
+  Button,
   Drawer,
   ListBox,
   ListBoxItem,
@@ -10,6 +12,7 @@ import {
   ToggleButton,
   ToggleButtonGroup,
 } from "@heroui/react";
+import { useOnboardingGuard } from "@/hooks/use-onboarding-guard";
 import { TabBar } from "@/components/app/tab-bar";
 import { useUserState } from "@/hooks/use-user-state";
 import { formatTravel, listMasjids } from "@/services/masjids";
@@ -22,13 +25,27 @@ import {
 const FILTERS = ["Has events", "Following", "Jumuʿah"] as const;
 
 export default function ExplorePage() {
+  useOnboardingGuard();
   const router = useRouter();
-  const [state, , { toggleSaved }] = useUserState();
+  const [state, update, { toggleSaved }] = useUserState();
   const [query, setQuery] = useState("");
   const [filters, setFilters] = useState<Set<string>>(new Set());
   const [expanded, setExpanded] = useState(false);
 
   const masjids = useMemo(() => listMasjids(), []);
+  const areas = useMemo(
+    () => Array.from(new Set(masjids.map((m) => m.area))).sort(),
+    [masjids]
+  );
+
+  function retryLocation() {
+    if (!("geolocation" in navigator)) return;
+    navigator.geolocation.getCurrentPosition(
+      () => update({ locationDenied: false }),
+      () => update({ locationDenied: true }),
+      { timeout: 10_000 }
+    );
+  }
   const filtered = useMemo(() => {
     let list = masjids;
     const q = query.trim().toLowerCase();
@@ -202,6 +219,49 @@ export default function ExplorePage() {
               </ToggleButton>
             ))}
           </ToggleButtonGroup>
+
+          {state.locationDenied && (
+            <div className="mt-3 flex flex-col gap-2.5">
+              <Alert status="danger">
+                <Alert.Indicator />
+                <Alert.Content>
+                  <Alert.Title>Location is off</Alert.Title>
+                  <Alert.Description>
+                    We can’t sort by walking distance without it — but you can
+                    still browse by area.
+                  </Alert.Description>
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    className="mt-2 self-start"
+                    onPress={retryLocation}
+                  >
+                    Try again
+                  </Button>
+                </Alert.Content>
+              </Alert>
+              <ToggleButtonGroup
+                selectionMode="single"
+                selectedKeys={new Set(areas.includes(query) ? [query] : [])}
+                onSelectionChange={(keys) =>
+                  setQuery(Array.from(keys as Set<string>)[0] ?? "")
+                }
+                aria-label="Browse by area"
+                className="flex flex-wrap gap-2"
+              >
+                {areas.map((area) => (
+                  <ToggleButton
+                    key={area}
+                    id={area}
+                    variant="default"
+                    className="min-h-[44px] rounded-[11px] px-3 text-[13px] font-medium shadow-[var(--surface-shadow)] data-[selected=true]:bg-accent data-[selected=true]:text-accent-foreground"
+                  >
+                    {area}
+                  </ToggleButton>
+                ))}
+              </ToggleButtonGroup>
+            </div>
+          )}
         </main>
 
         <button

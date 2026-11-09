@@ -1,7 +1,9 @@
 "use client";
 
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 import { ToggleButton, ToggleButtonGroup } from "@heroui/react";
+import { useOnboardingGuard } from "@/hooks/use-onboarding-guard";
 import { TabBar } from "@/components/app/tab-bar";
 import { useUserState } from "@/hooks/use-user-state";
 import { listEvents } from "@/services/events";
@@ -104,8 +106,19 @@ function EventRow({ event, myRsvp }: { event: Event; myRsvp?: Rsvp }) {
 }
 
 export default function EventsPage() {
+  useOnboardingGuard();
   const [state] = useUserState();
-  const events = listEvents();
+  const [filter, setFilter] = useState<(typeof FILTERS)[number]>("Upcoming");
+  const all = listEvents(state.customEvents);
+  // Mock data has no past events yet; "Past" is honestly empty.
+  const events =
+    filter === "Going"
+      ? all.filter((e) => state.rsvps[e.id] === "going")
+      : filter === "Past"
+        ? []
+        : all;
+  const thisWeek = events.slice(0, 3);
+  const nextWeek = events.slice(3);
 
   return (
     <div className="flex flex-1 flex-col">
@@ -120,7 +133,11 @@ export default function EventsPage() {
         <ToggleButtonGroup
           selectionMode="single"
           disallowEmptySelection
-          defaultSelectedKeys={new Set(["Upcoming"])}
+          selectedKeys={new Set([filter])}
+          onSelectionChange={(keys) => {
+            const key = Array.from(keys as Set<string>)[0];
+            if (key) setFilter(key as (typeof FILTERS)[number]);
+          }}
           aria-label="Event filters"
           className="flex gap-2 self-start"
         >
@@ -136,23 +153,37 @@ export default function EventsPage() {
           ))}
         </ToggleButtonGroup>
 
-        <h2 className="pl-0.5 text-[13.5px] font-medium text-muted">
-          This week
-        </h2>
-        <div className="flex flex-col gap-3">
-          {events.slice(0, 3).map((event) => (
-            <EventRow
-              key={event.id}
-              event={event}
-              myRsvp={state.rsvps[event.id]}
-            />
-          ))}
-        </div>
-
-        <h2 className="pl-0.5 text-[13.5px] font-medium text-muted">
-          Next week
-        </h2>
-        <EventRow event={events[3]} myRsvp={state.rsvps[events[3].id]} />
+        {events.length === 0 && (
+          <p className="px-0.5 py-6 text-[15px] text-muted">
+            {filter === "Going"
+              ? "You haven’t said you’re going to anything yet."
+              : "Nothing here yet."}
+          </p>
+        )}
+        {thisWeek.length > 0 && (
+          <>
+            <h2 className="pl-0.5 text-[13.5px] font-medium text-muted">
+              This week
+            </h2>
+            <div className="flex flex-col gap-3">
+              {thisWeek.map((event) => (
+                <EventRow key={event.id} event={event} myRsvp={state.rsvps[event.id]} />
+              ))}
+            </div>
+          </>
+        )}
+        {nextWeek.length > 0 && (
+          <>
+            <h2 className="pl-0.5 text-[13.5px] font-medium text-muted">
+              Next week
+            </h2>
+            <div className="flex flex-col gap-3">
+              {nextWeek.map((event) => (
+                <EventRow key={event.id} event={event} myRsvp={state.rsvps[event.id]} />
+              ))}
+            </div>
+          </>
+        )}
       </main>
       <TabBar active="events" />
     </div>

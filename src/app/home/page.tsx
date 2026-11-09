@@ -1,7 +1,10 @@
 "use client";
 
 import Link from "next/link";
-import { Avatar, AvatarFallback, Chip } from "@heroui/react";
+import { useSyncExternalStore } from "react";
+import { Alert, Avatar, AvatarFallback, Button, Chip } from "@heroui/react";
+import { LinkButton } from "@/components/link-button";
+import { useOnboardingGuard } from "@/hooks/use-onboarding-guard";
 import { TabBar } from "@/components/app/tab-bar";
 import { useUserState } from "@/hooks/use-user-state";
 import { initialsOf, type Event, type Rsvp } from "@/types";
@@ -67,15 +70,35 @@ function HomeEventCard({ event, myRsvp }: { event: Event; myRsvp?: Rsvp }) {
   );
 }
 
+function subscribeOnline(callback: () => void) {
+  window.addEventListener("online", callback);
+  window.addEventListener("offline", callback);
+  return () => {
+    window.removeEventListener("online", callback);
+    window.removeEventListener("offline", callback);
+  };
+}
+
+function useOnline() {
+  return useSyncExternalStore(
+    subscribeOnline,
+    () => navigator.onLine,
+    () => true
+  );
+}
+
 export default function HomePage() {
+  useOnboardingGuard();
+  const online = useOnline();
   const [state] = useUserState();
   const firstName = state.name.split(" ")[0] || "there";
   const initials = initialsOf(state.name) || "ML";
 
+  const isEmpty = state.followedMasjidIds.length === 0;
   const homeMasjidId = state.followedMasjidIds[0] ?? "masjidul-quds";
   const masjid = getMasjid(homeMasjidId);
 
-  const events = listEvents().slice(0, 2);
+  const events = listEvents(state.customEvents).slice(0, 2);
 
   return (
     <div className="flex flex-1 flex-col">
@@ -93,8 +116,8 @@ export default function HomePage() {
             </span>
           </div>
           <Link
-            href="/home"
-            aria-label="Notifications — nothing new yet"
+            href="/notifications"
+            aria-label="Notification settings"
             className="relative flex h-11 w-11 items-center justify-center rounded-xl text-foreground"
           >
             <IconBell size={24} />
@@ -103,6 +126,47 @@ export default function HomePage() {
           </Link>
         </header>
 
+        {!online && (
+          <Alert status="warning">
+            <Alert.Indicator />
+            <Alert.Content>
+              <Alert.Title>You’re offline</Alert.Title>
+              <Alert.Description>
+                What you see may have changed since you last had a connection.
+              </Alert.Description>
+              <Button
+                size="sm"
+                variant="outline"
+                className="mt-2 self-start"
+                onPress={() => window.location.reload()}
+              >
+                Try again
+              </Button>
+            </Alert.Content>
+          </Alert>
+        )}
+
+        {isEmpty ? (
+          <section
+            aria-label="Follow a masjid"
+            className="flex flex-1 flex-col justify-center gap-4 pb-10"
+          >
+            <h1 className="text-[22px] font-semibold leading-tight tracking-[-0.01em]">
+              Follow a masjid to see what’s on
+            </h1>
+            <p className="text-[15.5px] leading-snug text-muted">
+              Pick the masjid you pray at and its events and jamaat times land
+              here every day.
+            </p>
+            <LinkButton href="/explore" variant="primary" size="lg" fullWidth>
+              Find masjids near me
+            </LinkButton>
+            <LinkButton href="/explore" variant="ghost" size="lg" fullWidth>
+              Search by area instead
+            </LinkButton>
+          </section>
+        ) : (
+          <>
         <section
           aria-label="Next salah"
           className="flex items-center gap-3 rounded-2xl border border-border bg-surface px-3.5 py-3"
@@ -150,6 +214,8 @@ export default function HomePage() {
             ))}
           </div>
         </section>
+          </>
+        )}
       </main>
       <TabBar active="home" />
     </div>

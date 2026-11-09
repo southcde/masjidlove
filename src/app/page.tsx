@@ -1,6 +1,9 @@
 "use client";
 
 import Image from "next/image";
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { useUserState } from "@/hooks/use-user-state";
 import { Typography } from "@heroui/react";
 import { LinkButton } from "@/components/link-button";
 
@@ -48,6 +51,12 @@ function BrandBackdrop() {
 }
 
 export default function WelcomePage() {
+  const router = useRouter();
+  const [state, , { hydrated }] = useUserState();
+  useEffect(() => {
+    if (hydrated && state.onboardingComplete) router.replace("/home");
+  }, [hydrated, state.onboardingComplete, router]);
+
   return (
     <div className="relative flex flex-1 flex-col">
       <BrandBackdrop />

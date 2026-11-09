@@ -40,16 +40,20 @@ export default function MasjidDetailPage() {
   }
 
   const followed = state.followedMasjidIds.includes(masjid.id);
+  const edits =
+    masjid.id === (state.followedMasjidIds[0] ?? "masjidul-quds")
+      ? state.jamaatEdits
+      : {};
   const todayCells = masjid.todayJamaat
     ? [
-        masjid.todayJamaat.fajr,
-        masjid.todayJamaat.dhuhr,
-        masjid.todayJamaat.asr,
-        masjid.todayJamaat.maghrib,
-        masjid.todayJamaat.isha,
+        edits.fajr ?? masjid.todayJamaat.fajr,
+        edits.dhuhr ?? masjid.todayJamaat.dhuhr,
+        edits.asr ?? masjid.todayJamaat.asr,
+        edits.maghrib ?? masjid.todayJamaat.maghrib,
+        edits.isha ?? masjid.todayJamaat.isha,
       ]
     : null;
-  const events = listEvents().filter((e) => e.masjidId === masjid.id);
+  const events = listEvents(state.customEvents).filter((e) => e.masjidId === masjid.id);
 
   return (
     <div className="flex flex-1 flex-col">

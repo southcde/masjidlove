@@ -19,8 +19,8 @@ export default function LogInPage() {
 
   function submit(event: React.FormEvent) {
     event.preventDefault();
-    update({ email });
-    router.push("/role");
+    update({ email, onboardingComplete: true });
+    router.push("/home");
   }
 
   return (
@@ -102,7 +102,7 @@ export default function LogInPage() {
           {/* Social log-in is a mock until auth exists — continues to the
               same next step as the password path. */}
           <LinkButton
-            href="/role"
+            href="/home"
             variant="outline"
             fullWidth
             className="h-[52px] flex-1"
@@ -111,7 +111,7 @@ export default function LogInPage() {
             Google
           </LinkButton>
           <LinkButton
-            href="/role"
+            href="/home"
             variant="outline"
             fullWidth
             className="h-[52px] flex-1"

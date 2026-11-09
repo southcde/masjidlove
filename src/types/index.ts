@@ -57,8 +57,18 @@ export type UserState = {
   savedMasjidIds: string[];
   /** Event RSVPs */
   rsvps: Record<string, Rsvp>;
+  /** Events created by an admin on this device (no backend yet) */
+  customEvents: Event[];
+  /** Published jamaat edits for the admin's masjid, keyed by prayer id, "HH:MM" */
+  jamaatEdits: Partial<Record<PrayerId, string>>;
+  /** Whether the published edits apply to the whole week or only today */
+  jamaatEditsWholeWeek: boolean;
+  /** True when the user declined location; Explore falls back to areas */
+  locationDenied: boolean;
   onboardingComplete: boolean;
 };
+
+export type PrayerId = "fajr" | "dhuhr" | "asr" | "maghrib" | "isha" | "jumuah";
 
 export const defaultUserState: UserState = {
   name: "",
@@ -75,6 +85,10 @@ export const defaultUserState: UserState = {
   },
   savedMasjidIds: [],
   rsvps: {},
+  customEvents: [],
+  jamaatEdits: {},
+  jamaatEditsWholeWeek: true,
+  locationDenied: false,
   onboardingComplete: false,
 };
 

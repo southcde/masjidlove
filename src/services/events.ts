@@ -61,10 +61,13 @@ const EVENTS: Event[] = [
   },
 ];
 
-export function listEvents(): Event[] {
-  return EVENTS;
+/** Seed events plus any created on this device, soonest first. */
+export function listEvents(extra: Event[] = []): Event[] {
+  return [...EVENTS, ...extra].sort((a, b) =>
+    `${a.date} ${a.time}`.localeCompare(`${b.date} ${b.time}`)
+  );
 }
 
-export function getEvent(id: string): Event | undefined {
-  return EVENTS.find((e) => e.id === id);
+export function getEvent(id: string, extra: Event[] = []): Event | undefined {
+  return [...EVENTS, ...extra].find((e) => e.id === id);
 }
