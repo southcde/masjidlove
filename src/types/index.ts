@@ -35,6 +35,8 @@ export type Event = {
   whereNote?: string;
   goingCount: number;
   maybeCount: number;
+  /** Set by an admin; hidden from the public lists */
+  cancelled?: boolean;
   /** What the user answered. Mock state until the backend exists. */
   myRsvp?: Rsvp;
 };
@@ -79,6 +81,38 @@ export type ClassSession = {
   audience: string;
   description: string;
   bring?: string;
+  /** Set by an admin; hidden from the public lists */
+  cancelled?: boolean;
+};
+
+export type Cause = {
+  id: string;
+  name: string;
+  summary: string;
+  /** Rand */
+  goal: number;
+  raised: number;
+  /** Whether it can receive zakat. Scholars differ on edge cases; the app
+   *  only lists funds that serve people in need directly. */
+  zakatEligible: boolean;
+  tone: "emerald" | "teal" | "gold";
+};
+
+export type Announcement = {
+  id: string;
+  masjidId: string;
+  title: string;
+  body: string;
+  /** ISO timestamp */
+  at: string;
+};
+
+/** Details an admin can edit about their masjid. */
+export type MasjidProfile = {
+  address?: string;
+  phone?: string;
+  about?: string;
+  jumuahNote?: string;
 };
 
 export type OnboardingRole = "community" | "admin";
@@ -129,6 +163,17 @@ export type UserState = {
   rsvps: Record<string, Rsvp>;
   /** Events created by an admin on this device (no backend yet) */
   customEvents: Event[];
+  /** Admin edits to any event (seed or custom), keyed by event id */
+  eventEdits: Record<string, Partial<Event>>;
+  /** Classes created by an admin on this device */
+  customClasses: ClassSession[];
+  /** Admin edits to any class, keyed by class id */
+  classEdits: Record<string, Partial<ClassSession>>;
+  /** Causes created by an admin on this device */
+  customCauses: Cause[];
+  announcements: Announcement[];
+  /** Admin edits to masjid details, keyed by masjid id */
+  masjidProfile: Record<string, MasjidProfile>;
   /** Lesson ids the user has finished */
   completedLessons: string[];
   /** In-person class bookings: session id → seats held */
@@ -165,6 +210,12 @@ export const defaultUserState: UserState = {
   savedMasjidIds: [],
   rsvps: {},
   customEvents: [],
+  eventEdits: {},
+  customClasses: [],
+  classEdits: {},
+  customCauses: [],
+  announcements: [],
+  masjidProfile: {},
   completedLessons: [],
   bookings: {},
   waitlist: [],

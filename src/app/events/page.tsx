@@ -107,7 +107,7 @@ export default function EventsPage() {
   useOnboardingGuard();
   const [state] = useUserState();
   const [filter, setFilter] = useState<(typeof FILTERS)[number]>("Upcoming");
-  const all = listEvents(state.customEvents);
+  const all = listEvents(state.customEvents, state.eventEdits);
   // Mock data has no past events yet; "Past" is honestly empty.
   const events =
     filter === "Going"

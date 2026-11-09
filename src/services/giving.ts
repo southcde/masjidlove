@@ -1,20 +1,7 @@
-import type { Donation, DonationKind } from "@/types";
+import type { Cause, Donation, DonationKind } from "@/types";
 
 // Mock data until Supabase and a payment provider exist (SETUP.md §10).
 // Causes, goals and amounts raised are placeholders.
-
-export type Cause = {
-  id: string;
-  name: string;
-  summary: string;
-  /** Rand */
-  goal: number;
-  raised: number;
-  /** Whether it can receive zakat. Scholars differ on edge cases; the app
-   *  only lists funds that serve people in need directly. */
-  zakatEligible: boolean;
-  tone: "emerald" | "teal" | "gold";
-};
 
 const CAUSES: Cause[] = [
   {
@@ -97,16 +84,16 @@ export const KIND_COPY: Record<
   },
 };
 
-export function listCauses(): Cause[] {
-  return CAUSES;
+export function listCauses(extra: Cause[] = []): Cause[] {
+  return [...CAUSES, ...extra];
 }
 
-export function getCause(id: string): Cause | undefined {
-  return CAUSES.find((c) => c.id === id);
+export function getCause(id: string, extra: Cause[] = []): Cause | undefined {
+  return listCauses(extra).find((c) => c.id === id);
 }
 
-export function listZakatCauses(): Cause[] {
-  return CAUSES.filter((c) => c.zakatEligible);
+export function listZakatCauses(extra: Cause[] = []): Cause[] {
+  return listCauses(extra).filter((c) => c.zakatEligible);
 }
 
 export function formatRand(amount: number): string {
@@ -151,3 +138,46 @@ export function createDonation(
     at: new Date().toISOString(),
   };
 }
+
+// ---- Admin giving (sample data until the database and payments exist) ----
+
+const MONTH_NAMES = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+
+/** Sample monthly totals for the last six months, oldest first. */
+const SAMPLE_MONTHLY = [18400, 21250, 19800, 26300, 31100, 24750];
+
+export type MonthTotal = { key: string; label: string; amount: number };
+
+/** Last six months of giving to a masjid: sample base plus gifts made on this device. */
+export function monthlyGiving(
+  donations: Donation[],
+  masjidId: string,
+  now: Date = new Date()
+): MonthTotal[] {
+  return SAMPLE_MONTHLY.map((base, i) => {
+    const d = new Date(now.getFullYear(), now.getMonth() - (5 - i), 1);
+    const key = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}`;
+    const mine = donations
+      .filter((x) => x.kind === "masjid" && x.targetId === masjidId && x.at.startsWith(key))
+      .reduce((sum, x) => sum + x.amount, 0);
+    return { key, label: MONTH_NAMES[d.getMonth()], amount: base + mine };
+  });
+}
+
+export type SampleGift = {
+  id: string;
+  who: string;
+  kind: DonationKind;
+  amount: number;
+  monthly: boolean;
+  when: string;
+};
+
+/** Anonymous sample gifts shown to admins. Donor names are never shown. */
+export const SAMPLE_GIFTS: SampleGift[] = [
+  { id: "s1", who: "Anonymous donor", kind: "masjid", amount: 500, monthly: true, when: "Today" },
+  { id: "s2", who: "Anonymous donor", kind: "masjid", amount: 150, monthly: false, when: "Yesterday" },
+  { id: "s3", who: "Anonymous donor", kind: "sadaqah", amount: 100, monthly: false, when: "2 days ago" },
+  { id: "s4", who: "Anonymous donor", kind: "masjid", amount: 1000, monthly: true, when: "4 days ago" },
+  { id: "s5", who: "Anonymous donor", kind: "cause", amount: 250, monthly: false, when: "6 days ago" },
+];

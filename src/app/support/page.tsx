@@ -32,7 +32,7 @@ function dayLabel(iso: string) {
 export default function SupportPage() {
   useOnboardingGuard();
   const [state] = useUserState();
-  const causes = listCauses().slice(0, 3);
+  const causes = listCauses(state.customCauses).slice(0, 3);
   const total = totalGiven(state.donations);
   const recent = [...state.donations].reverse().slice(0, 4);
 

@@ -24,7 +24,7 @@ export default function ClassPage() {
   const [seats, setSeats] = useState(1);
   const [cancelOpen, setCancelOpen] = useState(false);
 
-  const session = getClass(params.id);
+  const session = getClass(params.id, state.customClasses, state.classEdits);
   if (!session) {
     return (
       <OnboardingScreen back backHref="/learn">

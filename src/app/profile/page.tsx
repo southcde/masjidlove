@@ -145,7 +145,7 @@ export default function ProfilePage() {
                 Masjid admin
               </span>
               <span className="text-[13px] text-accent-soft-foreground">
-                {adminMasjid.name} · post events, edit times
+                {adminMasjid.name} · open your dashboard
               </span>
             </span>
             <IconChevronRight size={18} />

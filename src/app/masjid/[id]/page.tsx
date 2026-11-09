@@ -40,6 +40,14 @@ export default function MasjidDetailPage() {
   }
 
   const followed = state.followedMasjidIds.includes(masjid.id);
+  const profile = state.masjidProfile[masjid.id] ?? {};
+  const address = profile.address ?? masjid.address;
+  const phone = profile.phone ?? masjid.phone;
+  const notices = state.announcements
+    .filter((a) => a.masjidId === masjid.id)
+    .slice()
+    .reverse()
+    .slice(0, 2);
   const edits =
     masjid.id === (state.followedMasjidIds[0] ?? "masjidul-quds")
       ? state.jamaatEdits
@@ -53,7 +61,7 @@ export default function MasjidDetailPage() {
         edits.isha ?? masjid.todayJamaat.isha,
       ]
     : null;
-  const events = listEvents(state.customEvents).filter((e) => e.masjidId === masjid.id);
+  const events = listEvents(state.customEvents, state.eventEdits).filter((e) => e.masjidId === masjid.id);
 
   return (
     <div className="flex flex-1 flex-col">
@@ -102,7 +110,7 @@ export default function MasjidDetailPage() {
             </button>
             <a
               href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
-                masjid.address ?? `${masjid.name}, ${masjid.area}, Cape Town`
+                address ?? `${masjid.name}, ${masjid.area}, Cape Town`
               )}`}
               target="_blank"
               rel="noreferrer"
@@ -113,6 +121,26 @@ export default function MasjidDetailPage() {
             </a>
           </div>
         </section>
+
+        {profile.about && (
+          <p className="px-1 text-[15px] leading-relaxed text-foreground/90">
+            {profile.about}
+          </p>
+        )}
+
+        {notices.map((notice) => (
+          <section
+            key={notice.id}
+            aria-label="Notice"
+            className="flex flex-col gap-1 rounded-3xl bg-gold-soft p-4 text-gold-foreground"
+          >
+            <span className="text-[11.5px] font-semibold uppercase tracking-wide">Notice</span>
+            <span className="font-display text-[17px] font-semibold leading-snug">
+              {notice.title}
+            </span>
+            <span className="text-[14px] leading-snug">{notice.body}</span>
+          </section>
+        ))}
 
         <section aria-label="Coming up here" className="flex flex-col gap-2.5">
           <div className="flex items-baseline justify-between">
@@ -211,6 +239,9 @@ export default function MasjidDetailPage() {
                 );
               })}
             </div>
+            {profile.jumuahNote && (
+              <p className="text-[12.5px] text-muted">{profile.jumuahNote}</p>
+            )}
             {masjid.timeChange && (
               <div className="flex items-center gap-2 text-[13px] text-muted">
                 <span className="rounded-lg bg-warning-soft px-[7px] py-[3px] text-xs font-semibold text-warning-soft-foreground">
@@ -232,11 +263,11 @@ export default function MasjidDetailPage() {
                 Address
               </span>
               <span className="flex-1 text-[15px]">
-                {masjid.address ??
+                {address ??
                   `${masjid.name}, ${masjid.area}, Cape Town`}
               </span>
             </div>
-            {masjid.phone && (
+            {phone && (
               <>
                 <div className="ml-4 h-px bg-separator" />
                 <div className="flex gap-3 px-4 py-3">
@@ -244,10 +275,10 @@ export default function MasjidDetailPage() {
                     Phone
                   </span>
                   <a
-                    href={`tel:${masjid.phone.replace(/\s/g, "")}`}
+                    href={`tel:${phone.replace(/\s/g, "")}`}
                     className="flex-1 text-[15px] text-link"
                   >
-                    {masjid.phone}
+                    {phone}
                   </a>
                 </div>
               </>

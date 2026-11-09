@@ -9,15 +9,13 @@ import {
   Button,
   Checkbox,
   Chip,
-  CloseButton,
   Description,
   Label,
   Switch,
   TimeField,
 } from "@heroui/react";
-import { Hydrated } from "@/components/app/hydrated";
-import { useUserState } from "@/hooks/use-user-state";
-import { getMasjid } from "@/services/masjids";
+import { useAdmin } from "@/hooks/use-admin";
+import { PageHeader, Panel } from "@/components/admin/ui";
 import { toMinutes } from "@/services/jamaat";
 import type { PrayerId } from "@/types";
 
@@ -42,10 +40,9 @@ function toValue(t: Time) {
   return `${String(t.hour).padStart(2, "0")}:${String(t.minute).padStart(2, "0")}`;
 }
 
-function AdminTimesScreen() {
+export default function AdminTimesPage() {
   const router = useRouter();
-  const [state, update] = useUserState();
-  const masjid = getMasjid(state.followedMasjidIds[0] ?? "masjidul-quds");
+  const { state, update, masjid } = useAdmin();
 
   const base: Record<PrayerId, string> = {
     fajr: state.jamaatEdits.fajr ?? masjid?.todayJamaat?.fajr ?? "05:42",
@@ -76,44 +73,33 @@ function AdminTimesScreen() {
   }
 
   return (
-    <div className="flex flex-1 flex-col">
-      <header className="flex h-11 flex-none items-center justify-between px-4">
-        <CloseButton
-          aria-label="Close"
-          onPress={() => (changed.length ? setDiscardOpen(true) : router.push("/admin"))}
-        />
-        {changed.length > 0 && (
-          <button
-            type="button"
-            onClick={() => setDiscardOpen(true)}
-            className="min-h-[44px] px-2 text-[15px] font-medium text-link"
-          >
-            Discard
-          </button>
-        )}
-      </header>
+    <>
+      <PageHeader
+        title="Jamaat times"
+        subtitle={`${masjid?.name} · this week`}
+        actions={
+          changed.length > 0 ? (
+            <Button variant="ghost" onPress={() => setDiscardOpen(true)}>
+              Discard
+            </Button>
+          ) : null
+        }
+      />
 
-      <main className="flex flex-1 flex-col gap-5 px-4 pb-4 pt-2">
-        <div className="flex flex-col gap-1">
-          <h1 className="text-[28px] font-bold leading-tight tracking-[-0.02em]">
-            This week’s times
-          </h1>
-          <p className="text-[13px] text-muted">{masjid?.name}</p>
-        </div>
+      {changed.length > 0 && (
+        <Alert status="warning">
+          <Alert.Indicator />
+          <Alert.Content>
+            <Alert.Description>
+              {changed.length} unsaved change{changed.length === 1 ? "" : "s"}. Nobody is
+              notified until you publish.
+            </Alert.Description>
+          </Alert.Content>
+        </Alert>
+      )}
 
-        {changed.length > 0 && (
-          <Alert status="warning">
-            <Alert.Indicator />
-            <Alert.Content>
-              <Alert.Description>
-                {changed.length} unsaved change{changed.length === 1 ? "" : "s"}.
-                Nobody is notified until you publish.
-              </Alert.Description>
-            </Alert.Content>
-          </Alert>
-        )}
-
-        <div className="flex flex-col gap-4">
+      <Panel>
+        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {ROWS.map(({ id, label }) => {
             const delta = toMinutes(draft[id]) - toMinutes(base[id]);
             const isChanged = delta !== 0;
@@ -146,12 +132,13 @@ function AdminTimesScreen() {
                   </TimeField.Group>
                   {isChanged && <Description>Was {base[id]}.</Description>}
                   {disabled && <Description>follows sunset</Description>}
-                  {id === "dhuhr" && !isChanged && (
-                    <Description>Friday Jumuʿah is set separately.</Description>
-                  )}
                 </TimeField>
                 {id === "maghrib" && (
-                  <Switch isSelected={autoMaghrib} onChange={setAutoMaghrib} className="flex items-center gap-3">
+                  <Switch
+                    isSelected={autoMaghrib}
+                    onChange={setAutoMaghrib}
+                    className="flex items-center gap-3"
+                  >
                     <Switch.Control>
                       <Switch.Thumb />
                     </Switch.Control>
@@ -165,7 +152,11 @@ function AdminTimesScreen() {
           })}
         </div>
 
-        <Checkbox isSelected={wholeWeek} onChange={setWholeWeek} className="flex items-center gap-3">
+        <Checkbox
+          isSelected={wholeWeek}
+          onChange={setWholeWeek}
+          className="flex items-center gap-3"
+        >
           <Checkbox.Control>
             <Checkbox.Indicator />
           </Checkbox.Control>
@@ -173,16 +164,10 @@ function AdminTimesScreen() {
             <Label>Apply to the rest of this week</Label>
           </Checkbox.Content>
         </Checkbox>
-      </main>
+      </Panel>
 
-      <footer className="sticky bottom-0 flex flex-col items-center gap-2 bg-background px-4 pb-8 pt-2">
-        <Button
-          variant="primary"
-          size="lg"
-          fullWidth
-          isDisabled={changed.length === 0}
-          onPress={publish}
-        >
+      <div className="flex flex-col items-end gap-2">
+        <Button variant="primary" size="lg" isDisabled={changed.length === 0} onPress={publish}>
           {changed.length
             ? `Publish ${changed.length} change${changed.length === 1 ? "" : "s"}`
             : "No changes to publish"}
@@ -192,7 +177,7 @@ function AdminTimesScreen() {
             {FOLLOWERS.toLocaleString("en-ZA")} followers will be notified.
           </span>
         )}
-      </footer>
+      </div>
 
       <AlertDialog isOpen={discardOpen} onOpenChange={setDiscardOpen}>
         <AlertDialog.Backdrop>
@@ -202,14 +187,20 @@ function AdminTimesScreen() {
                 <AlertDialog.Heading>Discard changes?</AlertDialog.Heading>
               </AlertDialog.Header>
               <AlertDialog.Body>
-                Your {changed.length} unpublished change
-                {changed.length === 1 ? "" : "s"} will be lost.
+                Your {changed.length} unpublished change{changed.length === 1 ? "" : "s"} will be
+                lost.
               </AlertDialog.Body>
               <AlertDialog.Footer>
                 <Button variant="outline" onPress={() => setDiscardOpen(false)}>
                   Keep editing
                 </Button>
-                <Button variant="danger" onPress={() => router.push("/admin")}>
+                <Button
+                  variant="danger"
+                  onPress={() => {
+                    setDraft(base);
+                    setDiscardOpen(false);
+                  }}
+                >
                   Discard
                 </Button>
               </AlertDialog.Footer>
@@ -217,14 +208,6 @@ function AdminTimesScreen() {
           </AlertDialog.Container>
         </AlertDialog.Backdrop>
       </AlertDialog>
-    </div>
-  );
-}
-
-export default function AdminTimesPage() {
-  return (
-    <Hydrated>
-      <AdminTimesScreen />
-    </Hydrated>
+    </>
   );
 }

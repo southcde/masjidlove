@@ -25,7 +25,7 @@ export default function AllSetPage() {
     .map((id) => getMasjid(id)?.name)
     .filter(Boolean) as string[];
 
-  const events = listEvents(state.customEvents).slice(0, 3);
+  const events = listEvents(state.customEvents, state.eventEdits).slice(0, 3);
 
   return (
     <OnboardingScreen>

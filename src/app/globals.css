@@ -299,6 +299,11 @@ h1 {
     transform: scaleX(0);
   }
 }
+@keyframes grow-y {
+  from {
+    transform: scaleY(0);
+  }
+}
 @keyframes drift {
   to {
     transform: translate(-44px, -44px);
@@ -359,6 +364,11 @@ nav[aria-label="Main"] [aria-current="page"] svg {
   animation: grow 0.9s cubic-bezier(0.2, 0.8, 0.2, 1) 0.15s backwards;
 }
 
+.bar-grow-y {
+  transform-origin: bottom center;
+  animation: grow-y 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) 0.1s backwards;
+}
+
 .anim-pop {
   animation: pop 0.45s cubic-bezier(0.2, 0.8, 0.2, 1) backwards;
 }
@@ -369,4 +379,9 @@ nav[aria-label="Main"] [aria-current="page"] svg {
 /* The star pattern slowly slides, one tile every 40s */
 .pattern-drift {
   animation: drift 40s linear infinite;
+}
+
+/* The admin dashboard is a wide desktop layout; it breaks out of the phone column. */
+.app-frame:has(.admin-shell) {
+  max-width: none;
 }

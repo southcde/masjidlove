@@ -109,3 +109,8 @@ export function formatTravel(masjid: Masjid): string {
   }
   return `${formatDistance(masjid.distanceKm)} · drive`;
 }
+
+/** The masjid an admin manages: their first follow, else Masjidul Quds (mock). */
+export function adminMasjidIdOf(followedMasjidIds: string[]): string {
+  return followedMasjidIds[0] ?? "masjidul-quds";
+}

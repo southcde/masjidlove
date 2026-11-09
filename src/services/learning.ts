@@ -346,14 +346,43 @@ export function nextLesson(course: Course, completed: string[]): Lesson {
   );
 }
 
-export function listClasses(): ClassSession[] {
-  return [...CLASSES].sort((a, b) =>
-    `${a.date} ${a.time}`.localeCompare(`${b.date} ${b.time}`)
-  );
+type ClassEdits = Record<string, Partial<ClassSession>>;
+
+function mergeClasses(extra: ClassSession[], edits: ClassEdits): ClassSession[] {
+  return [...CLASSES, ...extra].map((c) => ({ ...c, ...edits[c.id] }));
 }
 
-export function getClass(id: string): ClassSession | undefined {
-  return CLASSES.find((c) => c.id === id);
+function byStart(a: ClassSession, b: ClassSession) {
+  return `${a.date} ${a.time}`.localeCompare(`${b.date} ${b.time}`);
+}
+
+/** Public list: seed plus custom classes with admin edits, cancelled hidden. */
+export function listClasses(
+  extra: ClassSession[] = [],
+  edits: ClassEdits = {}
+): ClassSession[] {
+  return mergeClasses(extra, edits)
+    .filter((c) => !c.cancelled)
+    .sort(byStart);
+}
+
+/** Admin list: every class for one masjid, cancelled included. */
+export function listAdminClasses(
+  masjidId: string,
+  extra: ClassSession[] = [],
+  edits: ClassEdits = {}
+): ClassSession[] {
+  return mergeClasses(extra, edits)
+    .filter((c) => c.masjidId === masjidId)
+    .sort(byStart);
+}
+
+export function getClass(
+  id: string,
+  extra: ClassSession[] = [],
+  edits: ClassEdits = {}
+): ClassSession | undefined {
+  return mergeClasses(extra, edits).find((c) => c.id === id);
 }
 
 /** Seats left for other people, given how many the current user holds. */

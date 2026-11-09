@@ -61,13 +61,34 @@ const EVENTS: Event[] = [
   },
 ];
 
-/** Seed events plus any created on this device, soonest first. */
-export function listEvents(extra: Event[] = []): Event[] {
-  return [...EVENTS, ...extra].sort((a, b) =>
-    `${a.date} ${a.time}`.localeCompare(`${b.date} ${b.time}`)
-  );
+type EventEdits = Record<string, Partial<Event>>;
+
+function merge(extra: Event[], edits: EventEdits): Event[] {
+  return [...EVENTS, ...extra].map((e) => ({ ...e, ...edits[e.id] }));
 }
 
-export function getEvent(id: string, extra: Event[] = []): Event | undefined {
-  return [...EVENTS, ...extra].find((e) => e.id === id);
+/** Public list: seed plus custom events with admin edits, cancelled ones hidden. */
+export function listEvents(extra: Event[] = [], edits: EventEdits = {}): Event[] {
+  return merge(extra, edits)
+    .filter((e) => !e.cancelled)
+    .sort((a, b) => `${a.date} ${a.time}`.localeCompare(`${b.date} ${b.time}`));
+}
+
+/** Admin list: every event for one masjid, cancelled included. */
+export function listAdminEvents(
+  masjidId: string,
+  extra: Event[] = [],
+  edits: EventEdits = {}
+): Event[] {
+  return merge(extra, edits)
+    .filter((e) => e.masjidId === masjidId)
+    .sort((a, b) => `${a.date} ${a.time}`.localeCompare(`${b.date} ${b.time}`));
+}
+
+export function getEvent(
+  id: string,
+  extra: Event[] = [],
+  edits: EventEdits = {}
+): Event | undefined {
+  return merge(extra, edits).find((e) => e.id === id);
 }

@@ -44,7 +44,7 @@ export default function LearnPage() {
   const [mode, setMode] = useState<(typeof MODES)[number]>("Courses");
 
   const courses = listCourses();
-  const classes = listClasses();
+  const classes = listClasses(state.customClasses, state.classEdits);
   const started = courses
     .map((course) => ({ course, progress: courseProgress(course, state.completedLessons) }))
     .filter(({ progress }) => progress.done > 0 && progress.done < progress.total);

@@ -28,7 +28,7 @@ export default function EventDetailPage() {
   const params = useParams<{ id: string }>();
   const [state, , { setRsvp }] = useUserState();
 
-  const event = getEvent(params.id, state.customEvents);
+  const event = getEvent(params.id, state.customEvents, state.eventEdits);
   if (!event) {
     return (
       <main className="flex flex-1 flex-col items-center justify-center gap-4 p-6">
@@ -65,6 +65,12 @@ export default function EventDetailPage() {
           scene={sceneFor(event.title)}
           className="h-[150px] rounded-3xl shadow-premium"
         />
+
+        {event.cancelled && (
+          <div role="status" className="rounded-2xl bg-danger/10 p-4 text-[14.5px] font-medium text-danger">
+            This event has been cancelled by the masjid.
+          </div>
+        )}
 
         <div className="flex flex-col gap-2.5">
           {event.kind && (

@@ -44,9 +44,9 @@ function GiveScreen() {
     kind === "masjid"
       ? masjids.map((m) => ({ id: m.id, name: m.name, note: m.area }))
       : kind === "cause"
-        ? listCauses().map((c) => ({ id: c.id, name: c.name, note: "" }))
+        ? listCauses(state.customCauses).map((c) => ({ id: c.id, name: c.name, note: "" }))
         : kind === "zakat"
-          ? listZakatCauses().map((c) => ({ id: c.id, name: c.name, note: "" }))
+          ? listZakatCauses(state.customCauses).map((c) => ({ id: c.id, name: c.name, note: "" }))
           : [];
 
   const defaultTarget =

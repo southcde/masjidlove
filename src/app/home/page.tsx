@@ -106,7 +106,11 @@ export default function HomePage() {
   const homeMasjidId = state.followedMasjidIds[0] ?? "masjidul-quds";
   const masjid = getMasjid(homeMasjidId);
 
-  const events = listEvents(state.customEvents).slice(0, 2);
+  const events = listEvents(state.customEvents, state.eventEdits).slice(0, 2);
+  const latestNotice = state.announcements
+    .filter((a) => state.followedMasjidIds.includes(a.masjidId))
+    .slice()
+    .reverse()[0];
 
   return (
     <div className="flex flex-1 flex-col">
@@ -203,6 +207,21 @@ export default function HomePage() {
             <IconChevronRight size={16} />
           </Link>
         </section>
+
+        {latestNotice && (
+          <Link
+            href={`/masjid/${latestNotice.masjidId}`}
+            className="flex flex-col gap-1 rounded-3xl bg-gold-soft p-4 text-gold-foreground"
+          >
+            <span className="text-[11.5px] font-semibold uppercase tracking-wide">
+              {getMasjid(latestNotice.masjidId)?.name} · notice
+            </span>
+            <span className="font-display text-[17px] font-semibold leading-snug">
+              {latestNotice.title}
+            </span>
+            <span className="text-[13.5px] leading-snug">{latestNotice.body}</span>
+          </Link>
+        )}
 
         <section aria-label="Quick links" className="grid grid-cols-3 gap-3">
           {(
