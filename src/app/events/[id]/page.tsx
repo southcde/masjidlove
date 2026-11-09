@@ -3,6 +3,8 @@
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { Avatar, AvatarFallback, Chip } from "@heroui/react";
+import { PatternArt, toneFor } from "@/components/app/pattern-art";
+import { sceneFor } from "@/components/app/scene";
 import { useUserState } from "@/hooks/use-user-state";
 import { getEvent } from "@/services/events";
 import { getMasjid } from "@/services/masjids";
@@ -57,6 +59,12 @@ export default function EventDetailPage() {
             <IconBack size={24} />
           </Link>
         </header>
+
+        <PatternArt
+          tone={toneFor(event.id)}
+          scene={sceneFor(event.title)}
+          className="h-[150px] rounded-3xl shadow-premium"
+        />
 
         <div className="flex flex-col gap-2.5">
           {event.kind && (

@@ -9,6 +9,7 @@ import {
   ToggleButtonGroup,
 } from "@heroui/react";
 import { OnboardingScreen } from "@/components/onboarding/screen";
+import { sceneFor } from "@/components/app/scene";
 import { PatternArt, toneFor } from "@/components/app/pattern-art";
 import { useUserState } from "@/hooks/use-user-state";
 import { classWhen, getClass, seatsLeft } from "@/services/learning";
@@ -96,7 +97,8 @@ export default function ClassPage() {
       <div className="flex flex-1 flex-col gap-5 px-4 pb-4">
         <PatternArt
           tone={toneFor(session.id)}
-          className="flex flex-col justify-end gap-2 rounded-3xl p-5 pt-14 text-white shadow-lift"
+          scene={sceneFor(session.title)}
+          className="flex flex-col justify-end gap-2 rounded-3xl p-5 pt-24 text-white shadow-lift"
         >
           <span className="relative text-[12.5px] font-semibold text-white/80">
             In-person class
@@ -109,7 +111,7 @@ export default function ClassPage() {
         {mine > 0 && (
           <div
             role="status"
-            className="flex items-center gap-3 rounded-2xl bg-accent-soft p-4 text-accent-soft-foreground"
+            className="anim-pop flex items-center gap-3 rounded-2xl bg-accent-soft p-4 text-accent-soft-foreground"
           >
             <span className="flex h-9 w-9 flex-none items-center justify-center rounded-full bg-accent text-accent-foreground">
               <IconCheck size={18} />

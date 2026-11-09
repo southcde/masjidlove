@@ -1,7 +1,9 @@
 "use client";
 
 import Link from "next/link";
+import { CountUp } from "@/components/app/count-up";
 import { TabBar } from "@/components/app/tab-bar";
+import { Scene, sceneFor } from "@/components/app/scene";
 import { PatternArt } from "@/components/app/pattern-art";
 import { useOnboardingGuard } from "@/hooks/use-onboarding-guard";
 import { useUserState } from "@/hooks/use-user-state";
@@ -39,13 +41,14 @@ export default function SupportPage() {
       <main className="flex flex-1 flex-col gap-5 overflow-y-auto px-4 pb-4 pt-3">
         <PatternArt
           tone="gold"
+          scene="hands"
           className="flex flex-col gap-1 rounded-[32px] p-5 pb-6 text-white shadow-lift"
         >
           <span className="relative text-[12.5px] font-medium text-white/75">
             {total > 0 ? "You’ve given" : "Give in the way of Allah"}
           </span>
           <span className="font-display relative text-[52px] font-semibold leading-none tracking-tight">
-            {total > 0 ? formatRand(total) : "Support"}
+            {total > 0 ? <CountUp value={total} format={formatRand} /> : "Support"}
           </span>
           <span className="relative mt-1.5 max-w-[250px] text-[13.5px] leading-snug text-white/85">
             {total > 0
@@ -57,8 +60,9 @@ export default function SupportPage() {
         <section aria-label="Ways to give" className="grid grid-cols-2 gap-3">
           <Link
             href="/support/give?kind=masjid"
-            className="row-span-2 flex flex-col justify-between overflow-hidden rounded-[28px] bg-art-emerald p-4 text-white shadow-premium"
+            className="relative row-span-2 flex flex-col justify-between overflow-hidden rounded-[28px] bg-art-emerald p-4 text-white shadow-premium"
           >
+            <Scene name="masjid" />
             <span className="flex h-11 w-11 items-center justify-center rounded-2xl bg-white/15 backdrop-blur">
               <IconHeart size={22} />
             </span>
@@ -80,10 +84,13 @@ export default function SupportPage() {
             <Link
               key={kind}
               href={`/support/give?kind=${kind}`}
-              className={`flex min-h-[132px] flex-col justify-between rounded-[28px] ${bg} p-4 text-white shadow-premium`}
+              className={`relative flex min-h-[132px] flex-col justify-between overflow-hidden rounded-[28px] ${bg} p-4 text-white shadow-premium`}
             >
-              <Icon size={22} />
-              <span className="font-display text-[19px] font-semibold leading-tight">
+              <Scene name={kind === "cause" ? "drop" : "hands"} />
+              <span className="relative">
+                <Icon size={22} />
+              </span>
+              <span className="font-display relative text-[19px] font-semibold leading-tight">
                 {KIND_COPY[kind].title}
               </span>
             </Link>
@@ -129,12 +136,17 @@ export default function SupportPage() {
               <Link
                 key={cause.id}
                 href={`/support/give?kind=cause&target=${cause.id}`}
-                className="flex flex-col gap-2.5 rounded-3xl bg-background p-4 shadow-premium ring-1 ring-foreground/10"
+                className="flex flex-col gap-2.5 overflow-hidden rounded-3xl bg-background pb-4 shadow-premium ring-1 ring-foreground/10"
               >
-                <span className="font-display text-[18px] font-semibold leading-snug">
+                <PatternArt
+                  tone={cause.tone}
+                  scene={sceneFor(cause.name)}
+                  className="h-[84px]"
+                />
+                <span className="font-display px-4 text-[18px] font-semibold leading-snug">
                   {cause.name}
                 </span>
-                <span className="text-[13.5px] leading-snug text-muted">
+                <span className="px-4 text-[13.5px] leading-snug text-muted">
                   {cause.summary}
                 </span>
                 <div
@@ -143,14 +155,14 @@ export default function SupportPage() {
                   aria-valuemin={0}
                   aria-valuemax={100}
                   aria-label={`${cause.name} funded`}
-                  className="h-2 overflow-hidden rounded-full bg-default"
+                  className="mx-4 h-2 overflow-hidden rounded-full bg-default"
                 >
                   <div
-                    className="h-full rounded-full bg-gold"
+                    className="bar-grow h-full rounded-full bg-gold"
                     style={{ width: `${percent}%` }}
                   />
                 </div>
-                <span className="flex justify-between text-[12.5px]">
+                <span className="flex justify-between px-4 text-[12.5px]">
                   <span className="font-semibold">{formatRand(cause.raised)} raised</span>
                   <span className="text-muted">of {formatRand(cause.goal)}</span>
                 </span>

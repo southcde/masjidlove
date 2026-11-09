@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useState } from "react";
 import { ToggleButton, ToggleButtonGroup } from "@heroui/react";
 import { TabBar } from "@/components/app/tab-bar";
+import { sceneFor } from "@/components/app/scene";
 import { PatternArt, toneFor } from "@/components/app/pattern-art";
 import { useOnboardingGuard } from "@/hooks/use-onboarding-guard";
 import { useUserState } from "@/hooks/use-user-state";
@@ -30,7 +31,7 @@ function ProgressBar({ percent }: { percent: number }) {
       className="h-1.5 overflow-hidden rounded-full bg-default"
     >
       <div
-        className="h-full rounded-full bg-gradient-to-r from-accent to-[#2b8d5c]"
+        className="bar-grow h-full rounded-full bg-gradient-to-r from-accent to-[#2b8d5c]"
         style={{ width: `${percent}%` }}
       />
     </div>
@@ -90,7 +91,7 @@ export default function LearnPage() {
                 href={`/learn/course/${featured.course.id}/${nextLesson(featured.course, state.completedLessons).id}`}
                 className="block overflow-hidden rounded-3xl shadow-lift"
               >
-                <PatternArt tone="emerald" className="flex flex-col gap-3 p-5 text-white">
+                <PatternArt tone="emerald" scene="book" className="flex flex-col gap-3 p-5 text-white">
                   <span className="relative text-[12.5px] font-medium text-white/75">
                     Continue learning
                   </span>
@@ -103,7 +104,7 @@ export default function LearnPage() {
                   <div className="relative flex items-center gap-3">
                     <div className="h-1.5 flex-1 overflow-hidden rounded-full bg-white/25">
                       <div
-                        className="h-full rounded-full bg-gold"
+                        className="bar-grow h-full rounded-full bg-gold"
                         style={{ width: `${featured.progress.percent}%` }}
                       />
                     </div>
@@ -129,10 +130,11 @@ export default function LearnPage() {
                   >
                     <PatternArt
                       tone={toneFor(course.id)}
-                      className="flex h-[88px] w-[88px] flex-none items-center justify-center rounded-2xl text-white"
+                      scene={sceneFor(course.title + " " + course.category)}
+                      className="flex h-[88px] w-[88px] flex-none items-end justify-end rounded-2xl p-1.5 text-white"
                     >
-                      <span className="relative">
-                        <IconPlay size={30} />
+                      <span className="relative flex h-6 w-6 items-center justify-center rounded-full bg-black/30 backdrop-blur">
+                        <IconPlay size={14} />
                       </span>
                     </PatternArt>
                     <div className="flex min-w-0 flex-1 flex-col justify-center gap-1">
@@ -197,7 +199,7 @@ export default function LearnPage() {
                     href={`/learn/class/${session.id}`}
                     className="overflow-hidden rounded-3xl bg-background shadow-premium ring-1 ring-foreground/10 transition-transform active:scale-[0.99]"
                   >
-                    <PatternArt tone={toneFor(session.id)} className="h-[84px]">
+                    <PatternArt tone={toneFor(session.id)} scene={sceneFor(session.title)} className="h-[84px]">
                       <span className="absolute left-3.5 top-3 rounded-full bg-black/35 px-3 py-1.5 text-[12.5px] font-semibold text-white backdrop-blur">
                         {classWhen(session)}
                       </span>

@@ -61,14 +61,9 @@ export default function MasjidDetailPage() {
           --default block with the masjid's initial, never a stock photo. */}
       <PatternArt
         tone={toneFor(masjid.id)}
+        scene="masjid"
         className="flex h-[250px] flex-none items-center justify-center"
       >
-        <span
-          aria-hidden
-          className="font-display relative flex h-24 w-24 items-center justify-center rounded-[30px] bg-white/12 text-[46px] font-semibold text-white ring-1 ring-white/30 backdrop-blur"
-        >
-          {masjid.name[0]}
-        </span>
         <HeroBack />
       </PatternArt>
 

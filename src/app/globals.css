@@ -182,6 +182,7 @@ button,
 [data-reduce-motion="true"] *::after {
   animation-duration: 0.01ms !important;
   animation-iteration-count: 1 !important;
+  animation-delay: 0s !important;
   transition-duration: 0.01ms !important;
 }
 
@@ -191,6 +192,7 @@ button,
   *::after {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
+    animation-delay: 0s !important;
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
   }
@@ -249,4 +251,122 @@ h1 {
   margin-inline: auto;
   min-height: 100dvh;
   padding-bottom: env(safe-area-inset-bottom);
+}
+
+/*
+ * Motion. Everything here answers an action or marks arrival; the only
+ * ambient motion is the very slow pattern drift. All of it is switched off by
+ * prefers-reduced-motion and by Settings → Reduce motion (rules above).
+ */
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+}
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+}
+@keyframes pop {
+  0% {
+    transform: scale(0.82);
+    opacity: 0;
+  }
+  60% {
+    transform: scale(1.06);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+@keyframes shake {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-6px);
+  }
+  75% {
+    transform: translateX(6px);
+  }
+}
+@keyframes grow {
+  from {
+    transform: scaleX(0);
+  }
+}
+@keyframes drift {
+  to {
+    transform: translate(-44px, -44px);
+  }
+}
+
+/* Route change: a quick fade. Opacity only, so sticky bars keep working. */
+.page-enter {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  animation: fade-in 0.28s ease-out;
+}
+
+/* Screen content rises in, one block after another. "backwards" means the
+   animation never holds a transform afterwards, so press states still work. */
+.app-frame main > *,
+.app-frame main > div:only-child > * {
+  animation: rise 0.55s cubic-bezier(0.2, 0.8, 0.2, 1) backwards;
+}
+.app-frame main > :nth-child(2),
+.app-frame main > div:only-child > :nth-child(2) {
+  animation-delay: 60ms;
+}
+.app-frame main > :nth-child(3),
+.app-frame main > div:only-child > :nth-child(3) {
+  animation-delay: 120ms;
+}
+.app-frame main > :nth-child(4),
+.app-frame main > div:only-child > :nth-child(4) {
+  animation-delay: 180ms;
+}
+.app-frame main > :nth-child(5),
+.app-frame main > div:only-child > :nth-child(5) {
+  animation-delay: 240ms;
+}
+.app-frame main > :nth-child(n + 6),
+.app-frame main > div:only-child > :nth-child(n + 6) {
+  animation-delay: 300ms;
+}
+
+/* Press feedback */
+.button:active:not([data-disabled="true"]) {
+  transform: scale(0.97);
+}
+.button {
+  transition: transform 0.12s ease-out, background-color 0.2s, box-shadow 0.2s;
+}
+
+/* Tab bar: the active icon pops when it arrives */
+nav[aria-label="Main"] [aria-current="page"] svg {
+  animation: pop 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+/* Progress fills grow from the left */
+.bar-grow {
+  transform-origin: left center;
+  animation: grow 0.9s cubic-bezier(0.2, 0.8, 0.2, 1) 0.15s backwards;
+}
+
+.anim-pop {
+  animation: pop 0.45s cubic-bezier(0.2, 0.8, 0.2, 1) backwards;
+}
+.anim-shake {
+  animation: shake 0.32s ease-in-out;
+}
+
+/* The star pattern slowly slides, one tile every 40s */
+.pattern-drift {
+  animation: drift 40s linear infinite;
 }

@@ -4,6 +4,7 @@ import { useParams, useRouter } from "next/navigation";
 import { useState } from "react";
 import { Alert, Button } from "@heroui/react";
 import { OnboardingScreen } from "@/components/onboarding/screen";
+import { sceneFor } from "@/components/app/scene";
 import { PatternArt, toneFor } from "@/components/app/pattern-art";
 import { useUserState } from "@/hooks/use-user-state";
 import { getLesson } from "@/services/learning";
@@ -68,6 +69,7 @@ export default function LessonPage() {
         {lesson.kind === "video" && (
           <PatternArt
             tone={toneFor(course.id)}
+            scene={sceneFor(course.title)}
             className="flex aspect-video items-center justify-center rounded-3xl text-white shadow-lift"
           >
             <span className="relative flex h-16 w-16 items-center justify-center rounded-full bg-white/20 ring-1 ring-white/40 backdrop-blur">
@@ -109,9 +111,9 @@ export default function LessonPage() {
                     onClick={() => setPicked(i)}
                     className={`flex min-h-[52px] items-center justify-between rounded-2xl px-4 py-3 text-left text-[15.5px] ring-1 transition-colors ${
                       correct
-                        ? "bg-accent-soft font-semibold text-accent-soft-foreground ring-accent"
+                        ? "anim-pop bg-accent-soft font-semibold text-accent-soft-foreground ring-accent"
                         : wrong
-                          ? "bg-danger/10 text-danger ring-danger"
+                          ? "anim-shake bg-danger/10 text-danger ring-danger"
                           : "bg-background ring-foreground/15 active:bg-default"
                     }`}
                   >

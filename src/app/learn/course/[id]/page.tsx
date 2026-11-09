@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useParams } from "next/navigation";
 import { LinkButton } from "@/components/link-button";
 import { OnboardingScreen } from "@/components/onboarding/screen";
+import { sceneFor } from "@/components/app/scene";
 import { PatternArt, toneFor } from "@/components/app/pattern-art";
 import { useUserState } from "@/hooks/use-user-state";
 import { courseProgress, getCourse, nextLesson } from "@/services/learning";
@@ -51,7 +52,8 @@ export default function CoursePage() {
       <div className="flex flex-1 flex-col gap-5 px-4 pb-4">
         <PatternArt
           tone={toneFor(course.id)}
-          className="flex flex-col justify-end gap-2 rounded-3xl p-5 pt-16 text-white shadow-lift"
+          scene={sceneFor(course.title + " " + course.category)}
+          className="flex flex-col justify-end gap-2 rounded-3xl p-5 pt-24 text-white shadow-lift"
         >
           <span className="relative text-[12px] font-semibold uppercase tracking-wide text-white/75">
             {course.category} · {course.level}

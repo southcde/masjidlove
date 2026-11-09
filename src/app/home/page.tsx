@@ -5,6 +5,7 @@ import { useSyncExternalStore } from "react";
 import { Alert, Avatar, AvatarFallback, Button, Chip } from "@heroui/react";
 import { LinkButton } from "@/components/link-button";
 import { useOnboardingGuard } from "@/hooks/use-onboarding-guard";
+import { sceneFor } from "@/components/app/scene";
 import { PatternArt, toneFor } from "@/components/app/pattern-art";
 import { TabBar } from "@/components/app/tab-bar";
 import { useUserState } from "@/hooks/use-user-state";
@@ -37,7 +38,7 @@ function HomeEventCard({ event, myRsvp }: { event: Event; myRsvp?: Rsvp }) {
       href={`/events/${event.id}`}
       className="block overflow-hidden rounded-3xl bg-background shadow-premium ring-1 ring-foreground/10 transition-transform active:scale-[0.99]"
     >
-      <PatternArt tone={toneFor(event.id)} className="h-[124px]">
+      <PatternArt tone={toneFor(event.id)} scene={sceneFor(event.title)} className="h-[124px]">
         <span className="absolute left-3.5 top-3.5 rounded-full bg-black/35 px-3 py-1.5 text-[12.5px] font-semibold text-white backdrop-blur">
           {eventDateLabel(event)} · {event.time}
         </span>

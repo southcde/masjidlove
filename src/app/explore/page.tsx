@@ -13,6 +13,7 @@ import {
   ToggleButtonGroup,
 } from "@heroui/react";
 import { useOnboardingGuard } from "@/hooks/use-onboarding-guard";
+import { PatternArt, toneFor } from "@/components/app/pattern-art";
 import { MasjidMap } from "@/components/app/masjid-map";
 import { MAP_ENABLED } from "@/config/map";
 import { useIsDark } from "@/hooks/use-is-dark";
@@ -88,6 +89,11 @@ export default function ExplorePage() {
               index > 0 ? "border-t border-separator" : ""
             } ${!published ? "opacity-55" : "data-[hovered=true]:bg-default"}`}
           >
+            <PatternArt
+              tone={toneFor(masjid.id)}
+              scene="masjid"
+              className="h-12 w-12 flex-none rounded-2xl"
+            />
             <div className="flex min-w-0 flex-1 flex-col gap-0.5">
               <span className="text-base font-medium text-foreground">
                 {masjid.name}

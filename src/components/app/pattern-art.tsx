@@ -1,6 +1,7 @@
 "use client";
 
 import { useId, type ReactNode } from "react";
+import { Scene, type SceneName } from "@/components/app/scene";
 
 const TONES = ["emerald", "teal", "gold"] as const;
 export type ArtTone = (typeof TONES)[number];
@@ -18,10 +19,13 @@ export function toneFor(id: string): ArtTone {
  */
 export function PatternArt({
   tone = "emerald",
+  scene,
   className = "",
   children,
 }: {
   tone?: ArtTone;
+  /** Optional illustrated placeholder drawn bottom-right */
+  scene?: SceneName;
   className?: string;
   children?: ReactNode;
 }) {
@@ -48,9 +52,10 @@ export function PatternArt({
             />
           </pattern>
         </defs>
-        <rect width="100%" height="100%" fill={`url(#${id})`} />
+        <rect className="pattern-drift" width="200%" height="200%" fill={`url(#${id})`} />
       </svg>
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(120%_80%_at_85%_0%,rgba(255,255,255,0.16),transparent_60%)]" />
+      {scene && <Scene name={scene} />}
       {children}
     </div>
   );

@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { Description, Input, Label, TextField } from "@heroui/react";
+import { CountUp } from "@/components/app/count-up";
 import { LinkButton } from "@/components/link-button";
 import { OnboardingScreen } from "@/components/onboarding/screen";
 import { PatternArt } from "@/components/app/pattern-art";
@@ -98,7 +99,7 @@ export default function ZakatCalculatorPage() {
             Zakat due
           </span>
           <span className="font-display relative text-[46px] font-semibold leading-none">
-            {formatRand(result.due)}
+            <CountUp value={result.due} format={formatRand} />
           </span>
           <span className="relative mt-1 text-[13px] leading-snug text-white/85">
             {!result.hasNisabPrice

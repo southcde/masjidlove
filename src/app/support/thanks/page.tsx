@@ -31,7 +31,8 @@ function ThanksScreen() {
       <div className="flex flex-1 flex-col justify-center gap-6 px-4 pb-6">
         <PatternArt
           tone="gold"
-          className="flex flex-col items-center gap-3 rounded-[32px] px-6 py-10 text-center text-white shadow-lift"
+          scene="hands"
+          className="anim-pop flex flex-col items-center gap-3 rounded-[32px] px-6 py-10 text-center text-white shadow-lift"
         >
           <span className="relative flex h-16 w-16 items-center justify-center rounded-full bg-white/20 ring-1 ring-white/40 backdrop-blur">
             <IconHeart size={30} />
