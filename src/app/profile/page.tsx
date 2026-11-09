@@ -13,6 +13,7 @@ import {
   TextField,
 } from "@heroui/react";
 import { useOnboardingGuard } from "@/hooks/use-onboarding-guard";
+import { PatternArt } from "@/components/app/pattern-art";
 import { TabBar } from "@/components/app/tab-bar";
 import { useUserState } from "@/hooks/use-user-state";
 import { defaultUserState, initialsOf } from "@/types";
@@ -86,23 +87,25 @@ export default function ProfilePage() {
   return (
     <div className="flex flex-1 flex-col">
       <main className="flex flex-1 flex-col gap-5 overflow-y-auto px-4 pb-4 pt-3">
-        <header className="flex items-center gap-3.5">
-          <Avatar className="h-14 w-14 flex-none">
-            <AvatarFallback className="text-lg font-semibold">
+        <PatternArt tone="emerald" className="-mx-4 -mt-3 rounded-b-[32px] px-5 pb-8 pt-7">
+        <header className="relative flex items-center gap-3.5">
+          <Avatar className="h-14 w-14 flex-none ring-2 ring-gold">
+            <AvatarFallback className="!bg-white/20 text-lg font-semibold !text-white">
               {initialsOf(state.name) || "ML"}
             </AvatarFallback>
           </Avatar>
           <div className="flex min-w-0 flex-1 flex-col gap-px">
-            <span className="truncate text-xl font-semibold tracking-[-0.01em]">
+            <span className="font-display truncate text-[26px] font-semibold leading-tight text-white">
               {name}
             </span>
-            <span className="truncate text-[13px] text-muted">
+            <span className="truncate text-[13px] text-white/75">
               {state.email || "No email added"}
             </span>
           </div>
           <Button
             variant="ghost"
             size="sm"
+            className="bg-white/15 text-white backdrop-blur"
             onPress={() => {
               setDraft(state.name);
               setEditing((v) => !v);
@@ -111,9 +114,10 @@ export default function ProfilePage() {
             {editing ? "Cancel" : "Edit"}
           </Button>
         </header>
+        </PatternArt>
 
         {editing && (
-          <div className="flex flex-col gap-3 rounded-3xl border border-black/5 shadow-premium bg-surface p-4">
+          <div className="flex flex-col gap-3 rounded-3xl border border-foreground/10 shadow-premium bg-surface p-4">
             <TextField
               value={draft}
               onChange={setDraft}
@@ -152,7 +156,7 @@ export default function ProfilePage() {
           <SectionLabel action={{ href: "/explore", label: "Add" }}>
             Masjids you follow
           </SectionLabel>
-          <div className="overflow-hidden rounded-3xl border border-black/5 shadow-premium bg-surface">
+          <div className="overflow-hidden rounded-3xl border border-foreground/10 shadow-premium bg-surface">
             {followed.length === 0 && (
               <div className="px-4 py-4 text-[14px] text-muted">
                 You’re not following any masjids yet.{" "}
@@ -186,7 +190,7 @@ export default function ProfilePage() {
 
         <section className="flex flex-col gap-2" aria-label="Your RSVPs">
           <SectionLabel>Your RSVPs</SectionLabel>
-          <div className="overflow-hidden rounded-3xl border border-black/5 shadow-premium bg-surface">
+          <div className="overflow-hidden rounded-3xl border border-foreground/10 shadow-premium bg-surface">
             {rsvps.length === 0 && (
               <div className="px-4 py-4 text-[14px] text-muted">
                 Nothing yet.{" "}
@@ -232,7 +236,21 @@ export default function ProfilePage() {
 
         <section className="flex flex-col gap-2" aria-label="Settings">
           <SectionLabel>Settings</SectionLabel>
-          <div className="overflow-hidden rounded-3xl border border-black/5 shadow-premium bg-surface">
+          <div className="overflow-hidden rounded-3xl border border-foreground/10 shadow-premium bg-surface">
+            <Link href="/settings" className={rowClass}>
+              <span className="flex-1 text-[15.5px] font-medium">
+                Appearance and settings
+              </span>
+              <span className="text-[13px] text-muted">
+                {state.settings.theme === "system"
+                  ? "Auto"
+                  : state.settings.theme === "dark"
+                    ? "Dark"
+                    : "Light"}
+              </span>
+              <IconChevronRight size={16} />
+            </Link>
+            <div className="ml-4 h-px bg-separator" />
             <Link href="/notifications?from=profile" className={rowClass}>
               <span className="flex-1 text-[15.5px] font-medium">Notifications</span>
               <span className="text-[13px] text-muted">

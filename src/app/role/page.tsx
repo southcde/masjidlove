@@ -26,7 +26,7 @@ function RoleCard({
 }) {
   return (
     <Radio value={value}>
-      <Radio.Content className="flex-1 cursor-pointer rounded-3xl border border-black/5 shadow-premium bg-background p-4 pt-5 outline-none data-[selected=true]:border-2 data-[selected=true]:border-accent data-[selected=true]:bg-accent-soft">
+      <Radio.Content className="flex-1 cursor-pointer rounded-3xl border border-foreground/10 shadow-premium bg-background p-4 pt-5 outline-none data-[selected=true]:border-2 data-[selected=true]:border-accent data-[selected=true]:bg-accent-soft">
         {({ isSelected }: { isSelected: boolean }) => (
           <div className="relative flex flex-col items-center gap-3 text-center">
             {isSelected && (
@@ -120,7 +120,7 @@ export default function RolePage() {
           </div>
         </RadioGroup>
 
-        <div className="flex items-start gap-2.5 rounded-3xl border border-black/5 shadow-premium bg-surface p-4">
+        <div className="flex items-start gap-2.5 rounded-3xl border border-foreground/10 shadow-premium bg-surface p-4">
           <span className="mt-0.5 flex-none text-muted">
             <IconQuestion size={20} />
           </span>

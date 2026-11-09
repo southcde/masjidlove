@@ -5,15 +5,33 @@ import { defaultUserState, type Rsvp, type UserState } from "@/types";
 
 const STORAGE_KEY = "masjidlove.user";
 
+const SYNC_EVENT = "masjidlove:user";
+
 function read(): UserState {
   if (typeof window === "undefined") return defaultUserState;
   try {
     const raw = window.localStorage.getItem(STORAGE_KEY);
     if (!raw) return defaultUserState;
-    return { ...defaultUserState, ...JSON.parse(raw) };
+    const parsed = JSON.parse(raw);
+    return {
+      ...defaultUserState,
+      ...parsed,
+      settings: { ...defaultUserState.settings, ...parsed.settings },
+      notifications: { ...defaultUserState.notifications, ...parsed.notifications },
+    };
   } catch {
     return defaultUserState;
   }
+}
+
+/** Write to storage and tell every other useUserState instance on the page. */
+function persist(next: UserState) {
+  try {
+    window.localStorage.setItem(STORAGE_KEY, JSON.stringify(next));
+  } catch {
+    // Private mode etc. — the app still works for the session.
+  }
+  window.dispatchEvent(new Event(SYNC_EVENT));
 }
 
 /**
@@ -57,47 +75,36 @@ export function useUserState(): [
     setHydrated(true);
   }, []);
 
-  const update = useCallback((patch: Partial<UserState>) => {
-    setState((prev) => {
-      const next = { ...prev, ...patch };
-      try {
-        window.localStorage.setItem(STORAGE_KEY, JSON.stringify(next));
-      } catch {
-        // Private mode etc. — the app still works for the session.
-      }
-      return next;
-    });
+  // Keep separate components (e.g. the theme applier) in step with changes.
+  useEffect(() => {
+    const sync = () => setState(read());
+    window.addEventListener(SYNC_EVENT, sync);
+    window.addEventListener("storage", sync);
+    return () => {
+      window.removeEventListener(SYNC_EVENT, sync);
+      window.removeEventListener("storage", sync);
+    };
   }, []);
 
-  const setRsvp = useCallback(
-    (eventId: string, rsvp: Rsvp | null) => {
-      setState((prev) => {
-        const rsvps = { ...prev.rsvps };
-        if (rsvp === null) {
-          delete rsvps[eventId];
-        } else {
-          rsvps[eventId] = rsvp;
-        }
-        const next = { ...prev, rsvps };
-        try {
-          window.localStorage.setItem(STORAGE_KEY, JSON.stringify(next));
-        } catch {}
-        return next;
-      });
-    },
-    []
-  );
+  const update = useCallback((patch: Partial<UserState>) => {
+    persist({ ...read(), ...patch });
+  }, []);
+
+  const setRsvp = useCallback((eventId: string, rsvp: Rsvp | null) => {
+    const prev = read();
+    const rsvps = { ...prev.rsvps };
+    if (rsvp === null) delete rsvps[eventId];
+    else rsvps[eventId] = rsvp;
+    persist({ ...prev, rsvps });
+  }, []);
 
   const toggleSaved = useCallback((masjidId: string) => {
-    setState((prev) => {
-      const savedMasjidIds = prev.savedMasjidIds.includes(masjidId)
+    const prev = read();
+    persist({
+      ...prev,
+      savedMasjidIds: prev.savedMasjidIds.includes(masjidId)
         ? prev.savedMasjidIds.filter((id) => id !== masjidId)
-        : [...prev.savedMasjidIds, masjidId];
-      const next = { ...prev, savedMasjidIds };
-      try {
-        window.localStorage.setItem(STORAGE_KEY, JSON.stringify(next));
-      } catch {}
-      return next;
+        : [...prev.savedMasjidIds, masjidId],
     });
   }, []);
 

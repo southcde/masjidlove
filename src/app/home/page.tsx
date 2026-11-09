@@ -11,7 +11,15 @@ import { useUserState } from "@/hooks/use-user-state";
 import { initialsOf, type Event, type Rsvp } from "@/types";
 import { formatTravel, getMasjid } from "@/services/masjids";
 import { listEvents } from "@/services/events";
-import { IconBell, IconCheck, IconChevronRight, IconClock } from "@/components/icons";
+import {
+  IconBell,
+  IconBook,
+  IconCalculator,
+  IconCheck,
+  IconChevronRight,
+  IconClock,
+  IconHeart,
+} from "@/components/icons";
 
 const WEEKDAYS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
@@ -27,10 +35,10 @@ function HomeEventCard({ event, myRsvp }: { event: Event; myRsvp?: Rsvp }) {
   return (
     <Link
       href={`/events/${event.id}`}
-      className="block overflow-hidden rounded-3xl bg-background shadow-premium ring-1 ring-black/5 transition-transform active:scale-[0.99]"
+      className="block overflow-hidden rounded-3xl bg-background shadow-premium ring-1 ring-foreground/10 transition-transform active:scale-[0.99]"
     >
       <PatternArt tone={toneFor(event.id)} className="h-[124px]">
-        <span className="absolute left-3.5 top-3.5 rounded-full bg-white/90 px-3 py-1.5 text-[12.5px] font-semibold text-foreground backdrop-blur">
+        <span className="absolute left-3.5 top-3.5 rounded-full bg-black/35 px-3 py-1.5 text-[12.5px] font-semibold text-white backdrop-blur">
           {eventDateLabel(event)} · {event.time}
         </span>
         {event.kind && (
@@ -172,7 +180,7 @@ export default function HomePage() {
           <>
         <section
           aria-label="Next salah"
-          className="order-first flex items-center gap-3.5 rounded-3xl bg-background px-4 py-3.5 shadow-lift ring-1 ring-black/5"
+          className="order-first flex items-center gap-3.5 rounded-3xl bg-background px-4 py-3.5 shadow-lift ring-1 ring-foreground/10"
         >
           <span className="flex h-11 w-11 flex-none items-center justify-center rounded-2xl bg-gold-soft text-gold-foreground">
             <IconClock size={22} />
@@ -180,10 +188,10 @@ export default function HomePage() {
           <div className="flex min-w-0 flex-1 flex-col gap-px">
             <span className="font-display text-[19px] font-semibold leading-tight">
               Dhuhr 13:15
-              <span className="font-sans text-[13px] font-medium text-accent"> · in 1 h 42 m</span>
             </span>
             <span className="text-[13px] text-muted">
-              {masjid?.name} · {masjid && formatTravel(masjid)}
+              <span className="font-medium text-accent">in 1 h 42 m</span> ·{" "}
+              {masjid?.name}
             </span>
           </div>
           <Link
@@ -193,6 +201,27 @@ export default function HomePage() {
             All times
             <IconChevronRight size={16} />
           </Link>
+        </section>
+
+        <section aria-label="Quick links" className="grid grid-cols-3 gap-3">
+          {(
+            [
+              ["/support", "Give", IconHeart, "bg-art-gold"],
+              ["/learn", "Learn", IconBook, "bg-art-teal"],
+              ["/support/zakat", "Zakat", IconCalculator, "bg-art-emerald"],
+            ] as const
+          ).map(([href, label, Icon, bg]) => (
+            <Link
+              key={href}
+              href={href}
+              className={`flex h-[84px] flex-col justify-between rounded-3xl ${bg} p-3.5 text-white shadow-premium`}
+            >
+              <Icon size={22} />
+              <span className="font-display text-[16px] font-semibold leading-none">
+                {label}
+              </span>
+            </Link>
+          ))}
         </section>
 
         <section aria-label="This week near you" className="flex flex-col gap-3">

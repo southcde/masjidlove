@@ -73,7 +73,7 @@ export default function MasjidDetailPage() {
       </PatternArt>
 
       <main className="relative z-[1] -mt-6 flex flex-1 flex-col gap-4 px-4 pb-8">
-        <section className="flex flex-col gap-3.5 rounded-3xl border border-black/5 shadow-premium bg-background p-4 shadow-[var(--surface-shadow)]">
+        <section className="flex flex-col gap-3.5 rounded-3xl border border-foreground/10 shadow-premium bg-background p-4 shadow-[var(--surface-shadow)]">
           <div className="flex flex-col gap-1">
             <h1 className="text-[21px] font-bold leading-tight tracking-[-0.015em]">
               {masjid.name}
@@ -129,7 +129,7 @@ export default function MasjidDetailPage() {
               All {Math.max(events.length, 4)}
             </Link>
           </div>
-          <div className="overflow-hidden rounded-3xl border border-black/5 shadow-premium bg-surface">
+          <div className="overflow-hidden rounded-3xl border border-foreground/10 shadow-premium bg-surface">
             {events.length > 0 ? (
               events.map((event, index) => (
                 <button
@@ -182,7 +182,7 @@ export default function MasjidDetailPage() {
                 Full week
               </Link>
             </div>
-            <div className="flex overflow-hidden rounded-3xl border border-black/5 shadow-premium bg-surface">
+            <div className="flex overflow-hidden rounded-3xl border border-foreground/10 shadow-premium bg-surface">
               {todayCells.map((time, index) => {
                 const isNext = index === 1; // Dhuhr, per the mock "now"
                 return (
@@ -231,7 +231,7 @@ export default function MasjidDetailPage() {
 
         <section aria-label="Getting there" className="flex flex-col gap-2.5">
           <h2 className="text-[17px] font-semibold">Getting there</h2>
-          <div className="overflow-hidden rounded-3xl border border-black/5 shadow-premium bg-surface">
+          <div className="overflow-hidden rounded-3xl border border-foreground/10 shadow-premium bg-surface">
             <div className="flex gap-3 px-4 py-3">
               <span className="w-[70px] flex-none text-[15px] text-muted">
                 Address

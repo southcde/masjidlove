@@ -245,3 +245,38 @@ export function IconPlay(props: IconProps) {
     </svg>
   );
 }
+
+export function IconHeart(props: IconProps) {
+  return (
+    <svg {...base(props)}>
+      <path d="M12 20s-7.5-4.4-7.5-10A4.2 4.2 0 0 1 12 7.6 4.2 4.2 0 0 1 19.5 10c0 5.6-7.5 10-7.5 10Z" />
+    </svg>
+  );
+}
+
+export function IconCoins(props: IconProps) {
+  return (
+    <svg {...base(props)}>
+      <ellipse cx="9" cy="8" rx="5.5" ry="2.8" />
+      <path d="M3.5 8v4c0 1.5 2.5 2.8 5.5 2.8s5.5-1.3 5.5-2.8V8" />
+      <path d="M14.5 11.6c3 0 6 1.1 6 2.7v3.2c0 1.5-2.5 2.7-5.5 2.7-2.2 0-4-.6-5-1.5" />
+    </svg>
+  );
+}
+
+export function IconDrop(props: IconProps) {
+  return (
+    <svg {...base(props)}>
+      <path d="M12 3.5s6 6.2 6 10.6a6 6 0 0 1-12 0c0-4.4 6-10.6 6-10.6Z" />
+    </svg>
+  );
+}
+
+export function IconCalculator(props: IconProps) {
+  return (
+    <svg {...base(props)}>
+      <rect x="5" y="3.5" width="14" height="17" rx="2.5" />
+      <path d="M8.5 8h7M8.5 12.5h.01M12 12.5h.01M15.5 12.5h.01M8.5 16h.01M12 16h.01M15.5 16h.01" />
+    </svg>
+  );
+}

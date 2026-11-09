@@ -125,7 +125,7 @@ export default function LearnPage() {
                   <Link
                     key={course.id}
                     href={`/learn/course/${course.id}`}
-                    className="flex gap-3.5 rounded-3xl bg-background p-3 shadow-premium ring-1 ring-black/5 transition-transform active:scale-[0.99]"
+                    className="flex gap-3.5 rounded-3xl bg-background p-3 shadow-premium ring-1 ring-foreground/10 transition-transform active:scale-[0.99]"
                   >
                     <PatternArt
                       tone={toneFor(course.id)}
@@ -195,10 +195,10 @@ export default function LearnPage() {
                   <Link
                     key={session.id}
                     href={`/learn/class/${session.id}`}
-                    className="overflow-hidden rounded-3xl bg-background shadow-premium ring-1 ring-black/5 transition-transform active:scale-[0.99]"
+                    className="overflow-hidden rounded-3xl bg-background shadow-premium ring-1 ring-foreground/10 transition-transform active:scale-[0.99]"
                   >
                     <PatternArt tone={toneFor(session.id)} className="h-[84px]">
-                      <span className="absolute left-3.5 top-3 rounded-full bg-white/90 px-3 py-1.5 text-[12.5px] font-semibold text-foreground backdrop-blur">
+                      <span className="absolute left-3.5 top-3 rounded-full bg-black/35 px-3 py-1.5 text-[12.5px] font-semibold text-white backdrop-blur">
                         {classWhen(session)}
                       </span>
                       <span className="absolute right-3.5 top-3 rounded-full bg-black/25 px-2.5 py-1.5 text-[12px] font-semibold text-white backdrop-blur">

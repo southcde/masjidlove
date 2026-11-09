@@ -130,7 +130,7 @@ export default function ClassPage() {
           {session.description}
         </p>
 
-        <dl className="overflow-hidden rounded-3xl bg-background shadow-premium ring-1 ring-black/5">
+        <dl className="overflow-hidden rounded-3xl bg-background shadow-premium ring-1 ring-foreground/10">
           {details.map(([term, value], i) => (
             <div
               key={term}

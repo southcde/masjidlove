@@ -112,7 +112,7 @@ export default function LessonPage() {
                         ? "bg-accent-soft font-semibold text-accent-soft-foreground ring-accent"
                         : wrong
                           ? "bg-danger/10 text-danger ring-danger"
-                          : "bg-background ring-black/10 active:bg-default"
+                          : "bg-background ring-foreground/15 active:bg-default"
                     }`}
                   >
                     {option}

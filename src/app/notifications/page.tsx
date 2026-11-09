@@ -52,7 +52,9 @@ function NotificationRow({
 
 function NotificationsScreen() {
   const router = useRouter();
-  const fromProfile = useSearchParams().get("from") === "profile";
+  const from = useSearchParams().get("from");
+  const origin = from === "settings" ? "/settings" : from === "profile" ? "/profile" : null;
+  const fromProfile = origin !== null;
   const [state, update] = useUserState();
   const [prefs, setPrefs] = useState<NotificationPreferences>(
     state.notifications
@@ -67,13 +69,13 @@ function NotificationsScreen() {
 
   function save() {
     update({ notifications: prefs, onboardingComplete: true });
-    router.push(fromProfile ? "/profile" : "/all-set");
+    router.push(origin ?? "/all-set");
   }
 
   return (
     <OnboardingScreen
       back
-      backHref={fromProfile ? "/profile" : "/follow-masjids"}
+      backHref={origin ?? "/follow-masjids"}
       footer={
         <Button variant="primary" size="lg" fullWidth onPress={save}>
           {fromProfile ? "Save" : "Save and continue"}
@@ -90,7 +92,7 @@ function NotificationsScreen() {
           </Typography.Paragraph>
         </div>
 
-        <div className="flex flex-col overflow-hidden rounded-3xl border border-black/5 shadow-premium bg-surface">
+        <div className="flex flex-col overflow-hidden rounded-3xl border border-foreground/10 shadow-premium bg-surface">
           <NotificationRow
             label="New events"
             description="When a masjid you follow posts something"

@@ -76,7 +76,7 @@ export default function CoursePage() {
           ].map(([value, unit]) => (
             <div
               key={unit}
-              className="flex flex-col items-center gap-px rounded-2xl bg-surface py-3 ring-1 ring-black/5"
+              className="flex flex-col items-center gap-px rounded-2xl bg-surface py-3 ring-1 ring-foreground/10"
             >
               <span className="font-display text-[22px] font-semibold">{value}</span>
               <span className="text-[12px] text-muted">{unit}</span>
@@ -86,7 +86,7 @@ export default function CoursePage() {
 
         <section className="flex flex-col gap-2" aria-label="Lessons">
           <h2 className="font-display text-[22px] font-semibold">Lessons</h2>
-          <div className="overflow-hidden rounded-3xl bg-background shadow-premium ring-1 ring-black/5">
+          <div className="overflow-hidden rounded-3xl bg-background shadow-premium ring-1 ring-foreground/10">
             {course.lessons.map((lesson, index) => {
               const done = state.completedLessons.includes(lesson.id);
               return (

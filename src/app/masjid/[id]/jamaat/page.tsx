@@ -69,7 +69,7 @@ export default function JamaatWeekPage() {
           </span>
         </div>
 
-        <div className="overflow-hidden rounded-3xl border border-black/5 shadow-premium">
+        <div className="overflow-hidden rounded-3xl border border-foreground/10 shadow-premium">
           <div className="flex border-b border-separator bg-surface">
             <span className="w-[54px] flex-none py-2 pl-3" />
             {prayerNames.map((name) => (

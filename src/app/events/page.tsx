@@ -59,16 +59,16 @@ function EventRow({ event, myRsvp }: { event: Event; myRsvp?: Rsvp }) {
     <button
       type="button"
       onClick={() => router.push(`/events/${event.id}`)}
-      className="flex w-full items-center gap-3.5 rounded-3xl border border-black/5 shadow-premium bg-background p-3.5 text-start shadow-[var(--surface-shadow)] active:bg-default"
+      className="flex w-full items-center gap-3.5 rounded-3xl border border-foreground/10 bg-background p-3.5 text-start shadow-premium active:bg-default"
     >
       <span
-        className={`flex h-14 w-[52px] flex-none flex-col items-center justify-center rounded-xl ${
-          going ? "bg-accent-soft" : "bg-default"
+        className={`flex h-[68px] w-[60px] flex-none flex-col items-center justify-center rounded-2xl ${
+          going ? "bg-accent text-accent-foreground" : "bg-default"
         }`}
       >
         <span
           className={`text-[11.5px] font-semibold ${
-            going ? "text-accent-soft-foreground" : "text-muted"
+            going ? "text-accent-foreground/80" : "text-muted"
           }`}
         >
           {date
@@ -76,9 +76,7 @@ function EventRow({ event, myRsvp }: { event: Event; myRsvp?: Rsvp }) {
             .toUpperCase()}
         </span>
         <span
-          className={`text-[22px] font-bold leading-tight ${
-            going ? "text-accent-soft-foreground" : ""
-          }`}
+          className="font-display text-[30px] font-semibold leading-none"
         >
           {date.getDate()}
         </span>

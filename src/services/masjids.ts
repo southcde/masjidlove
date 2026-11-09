@@ -6,6 +6,8 @@ import type { Masjid } from "@/types";
 const MASJIDS: Masjid[] = [
   {
     id: "masjidul-quds",
+    lat: -33.956,
+    lng: 18.502,
     name: "Masjidul Quds",
     area: "Gatesville",
     distanceKm: 0.65,
@@ -26,6 +28,8 @@ const MASJIDS: Masjid[] = [
   },
   {
     id: "habibia",
+    lat: -33.954,
+    lng: 18.529,
     name: "Habibia Masjid",
     area: "Rylands",
     distanceKm: 1.1,
@@ -48,6 +52,8 @@ const MASJIDS: Masjid[] = [
   },
   {
     id: "masjidus-sunni",
+    lat: -33.95,
+    lng: 18.525,
     name: "Masjidus Sunni",
     area: "Rylands",
     distanceKm: 1.4,
@@ -63,6 +69,8 @@ const MASJIDS: Masjid[] = [
   },
   {
     id: "zeenatul-islam",
+    lat: -33.929,
+    lng: 18.435,
     name: "Zeenatul Islam Masjid",
     area: "District Six",
     distanceKm: 4.6,
@@ -70,6 +78,8 @@ const MASJIDS: Masjid[] = [
   },
   {
     id: "masjidul-jamiah",
+    lat: -33.946,
+    lng: 18.477,
     name: "Masjidul Jamiah",
     area: "Mowbray",
     distanceKm: 5.2,

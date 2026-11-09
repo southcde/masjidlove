@@ -3,6 +3,9 @@ export type Masjid = {
   name: string;
   area: string;
   distanceKm: number;
+  /** WGS84 coordinates, used by the map */
+  lat: number;
+  lng: number;
   /** Minutes on foot; undefined when it needs transport */
   walkMinutes?: number;
   eventsThisWeek?: number;
@@ -88,6 +91,31 @@ export type NotificationPreferences = {
   reminderLead: "30min" | "1hour" | "morning";
 };
 
+export type ThemeChoice = "system" | "light" | "dark";
+export type TextSize = "default" | "large" | "larger";
+
+export type AppSettings = {
+  theme: ThemeChoice;
+  textSize: TextSize;
+  reduceMotion: boolean;
+};
+
+export type DonationKind = "masjid" | "cause" | "sadaqah" | "zakat";
+
+export type Donation = {
+  id: string;
+  kind: DonationKind;
+  /** Masjid id or cause id; empty for general sadaqah/zakat */
+  targetId: string;
+  /** Display name of where it went, saved so history survives data changes */
+  targetName: string;
+  /** Whole rand */
+  amount: number;
+  monthly: boolean;
+  /** ISO timestamp */
+  at: string;
+};
+
 export type UserState = {
   name: string;
   email: string;
@@ -113,6 +141,9 @@ export type UserState = {
   jamaatEditsWholeWeek: boolean;
   /** True when the user declined location; Explore falls back to areas */
   locationDenied: boolean;
+  settings: AppSettings;
+  /** Giving history. Test mode: no payment provider is connected. */
+  donations: Donation[];
   onboardingComplete: boolean;
 };
 
@@ -140,6 +171,8 @@ export const defaultUserState: UserState = {
   jamaatEdits: {},
   jamaatEditsWholeWeek: true,
   locationDenied: false,
+  settings: { theme: "system", textSize: "default", reduceMotion: false },
+  donations: [],
   onboardingComplete: false,
 };
 

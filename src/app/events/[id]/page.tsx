@@ -72,7 +72,7 @@ export default function EventDetailPage() {
           </h1>
         </div>
 
-        <section className="overflow-hidden rounded-3xl border border-black/5 shadow-premium bg-surface">
+        <section className="overflow-hidden rounded-3xl border border-foreground/10 shadow-premium bg-surface">
           <div className="flex items-center gap-3 px-4 py-3">
             <span className="flex-none text-muted">
               <IconCalendar size={20} />

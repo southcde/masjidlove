@@ -13,6 +13,9 @@ import {
   ToggleButtonGroup,
 } from "@heroui/react";
 import { useOnboardingGuard } from "@/hooks/use-onboarding-guard";
+import { MasjidMap } from "@/components/app/masjid-map";
+import { MAP_ENABLED } from "@/config/map";
+import { useIsDark } from "@/hooks/use-is-dark";
 import { TabBar } from "@/components/app/tab-bar";
 import { useUserState } from "@/hooks/use-user-state";
 import { formatTravel, listMasjids } from "@/services/masjids";
@@ -28,6 +31,7 @@ export default function ExplorePage() {
   useOnboardingGuard();
   const router = useRouter();
   const [state, update, { toggleSaved }] = useUserState();
+  const isDark = useIsDark();
   const [query, setQuery] = useState("");
   const [filters, setFilters] = useState<Set<string>>(new Set());
   const [expanded, setExpanded] = useState(false);
@@ -128,6 +132,15 @@ export default function ExplorePage() {
 
   return (
     <div className="relative flex flex-1 flex-col">
+      {MAP_ENABLED ? (
+        <MasjidMap
+          masjids={masjids}
+          followedIds={state.followedMasjidIds}
+          dark={isDark}
+          onSelect={(id) => router.push(`/masjid/${id}`)}
+        />
+      ) : (
+        <>
       {/* Map placeholder — GAPS: Mapbox lands with the integrations run.
           Flat blocks read as roads; markers are custom overlays. */}
       <div className="absolute inset-0 bg-snow" aria-hidden>
@@ -180,6 +193,9 @@ export default function ExplorePage() {
         className="absolute left-[202px] top-[186px] h-4 w-4 rounded-full border-[3px] border-white bg-link shadow-[var(--surface-shadow)]"
         aria-hidden
       />
+
+        </>
+      )}
 
       <div className="relative flex flex-1 flex-col">
         <main className="flex flex-1 flex-col px-4 pt-14">
