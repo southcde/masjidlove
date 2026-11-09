@@ -36,6 +36,48 @@ export type Event = {
   myRsvp?: Rsvp;
 };
 
+export type Quiz = { question: string; options: string[]; answer: number };
+
+export type Lesson = {
+  id: string;
+  title: string;
+  minutes: number;
+  kind: "video" | "reading" | "quiz";
+  /** Body text shown on the lesson page */
+  body: string;
+  quiz?: Quiz;
+};
+
+export type Course = {
+  id: string;
+  title: string;
+  teacher: string;
+  level: "Beginner" | "Intermediate";
+  category: string;
+  summary: string;
+  lessons: Lesson[];
+};
+
+export type ClassSession = {
+  id: string;
+  title: string;
+  teacher: string;
+  masjidId: string;
+  /** ISO date (yyyy-mm-dd) */
+  date: string;
+  /** 24h start time */
+  time: string;
+  durationMinutes: number;
+  capacity: number;
+  /** Seats already taken by other people */
+  takenSeats: number;
+  /** "Free" or a price like "R60" */
+  price: string;
+  audience: string;
+  description: string;
+  bring?: string;
+};
+
 export type OnboardingRole = "community" | "admin";
 
 export type NotificationPreferences = {
@@ -59,6 +101,12 @@ export type UserState = {
   rsvps: Record<string, Rsvp>;
   /** Events created by an admin on this device (no backend yet) */
   customEvents: Event[];
+  /** Lesson ids the user has finished */
+  completedLessons: string[];
+  /** In-person class bookings: session id → seats held */
+  bookings: Record<string, number>;
+  /** Session ids the user is on the waitlist for */
+  waitlist: string[];
   /** Published jamaat edits for the admin's masjid, keyed by prayer id, "HH:MM" */
   jamaatEdits: Partial<Record<PrayerId, string>>;
   /** Whether the published edits apply to the whole week or only today */
@@ -86,6 +134,9 @@ export const defaultUserState: UserState = {
   savedMasjidIds: [],
   rsvps: {},
   customEvents: [],
+  completedLessons: [],
+  bookings: {},
+  waitlist: [],
   jamaatEdits: {},
   jamaatEditsWholeWeek: true,
   locationDenied: false,

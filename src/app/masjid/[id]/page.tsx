@@ -2,8 +2,8 @@
 
 import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
-import { Avatar, AvatarFallback } from "@heroui/react";
 import { HeroBack } from "@/components/app/hero-back";
+import { PatternArt, toneFor } from "@/components/app/pattern-art";
 import { useUserState } from "@/hooks/use-user-state";
 import { formatDistance, formatTravel, getMasjid } from "@/services/masjids";
 import { listEvents } from "@/services/events";
@@ -59,17 +59,21 @@ export default function MasjidDetailPage() {
     <div className="flex flex-1 flex-col">
       {/* Hero — GAPS: real photo arrives via admin upload; until then a
           --default block with the masjid's initial, never a stock photo. */}
-      <div className="relative flex h-[250px] flex-none items-center justify-center bg-default">
-        <Avatar className="h-20 w-20">
-          <AvatarFallback className="bg-default text-[28px] font-semibold text-muted">
-            {masjid.name[0]}
-          </AvatarFallback>
-        </Avatar>
+      <PatternArt
+        tone={toneFor(masjid.id)}
+        className="flex h-[250px] flex-none items-center justify-center"
+      >
+        <span
+          aria-hidden
+          className="font-display relative flex h-24 w-24 items-center justify-center rounded-[30px] bg-white/12 text-[46px] font-semibold text-white ring-1 ring-white/30 backdrop-blur"
+        >
+          {masjid.name[0]}
+        </span>
         <HeroBack />
-      </div>
+      </PatternArt>
 
       <main className="relative z-[1] -mt-6 flex flex-1 flex-col gap-4 px-4 pb-8">
-        <section className="flex flex-col gap-3.5 rounded-2xl border border-border bg-background p-4 shadow-[var(--surface-shadow)]">
+        <section className="flex flex-col gap-3.5 rounded-3xl border border-black/5 shadow-premium bg-background p-4 shadow-[var(--surface-shadow)]">
           <div className="flex flex-col gap-1">
             <h1 className="text-[21px] font-bold leading-tight tracking-[-0.015em]">
               {masjid.name}
@@ -125,7 +129,7 @@ export default function MasjidDetailPage() {
               All {Math.max(events.length, 4)}
             </Link>
           </div>
-          <div className="overflow-hidden rounded-2xl border border-border bg-surface">
+          <div className="overflow-hidden rounded-3xl border border-black/5 shadow-premium bg-surface">
             {events.length > 0 ? (
               events.map((event, index) => (
                 <button
@@ -178,7 +182,7 @@ export default function MasjidDetailPage() {
                 Full week
               </Link>
             </div>
-            <div className="flex overflow-hidden rounded-2xl border border-border bg-surface">
+            <div className="flex overflow-hidden rounded-3xl border border-black/5 shadow-premium bg-surface">
               {todayCells.map((time, index) => {
                 const isNext = index === 1; // Dhuhr, per the mock "now"
                 return (
@@ -227,7 +231,7 @@ export default function MasjidDetailPage() {
 
         <section aria-label="Getting there" className="flex flex-col gap-2.5">
           <h2 className="text-[17px] font-semibold">Getting there</h2>
-          <div className="overflow-hidden rounded-2xl border border-border bg-surface">
+          <div className="overflow-hidden rounded-3xl border border-black/5 shadow-premium bg-surface">
             <div className="flex gap-3 px-4 py-3">
               <span className="w-[70px] flex-none text-[15px] text-muted">
                 Address

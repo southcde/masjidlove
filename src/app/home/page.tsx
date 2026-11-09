@@ -5,6 +5,7 @@ import { useSyncExternalStore } from "react";
 import { Alert, Avatar, AvatarFallback, Button, Chip } from "@heroui/react";
 import { LinkButton } from "@/components/link-button";
 import { useOnboardingGuard } from "@/hooks/use-onboarding-guard";
+import { PatternArt, toneFor } from "@/components/app/pattern-art";
 import { TabBar } from "@/components/app/tab-bar";
 import { useUserState } from "@/hooks/use-user-state";
 import { initialsOf, type Event, type Rsvp } from "@/types";
@@ -26,22 +27,20 @@ function HomeEventCard({ event, myRsvp }: { event: Event; myRsvp?: Rsvp }) {
   return (
     <Link
       href={`/events/${event.id}`}
-      className="block overflow-hidden rounded-2xl border border-border bg-background shadow-[var(--surface-shadow)] active:bg-default"
+      className="block overflow-hidden rounded-3xl bg-background shadow-premium ring-1 ring-black/5 transition-transform active:scale-[0.99]"
     >
-      <div className="relative h-[106px] bg-default" aria-hidden />
-      <div className="flex flex-col gap-2 p-3.5">
-        <div className="flex items-center gap-2">
-          <Chip
-            variant="secondary"
-            className="bg-accent-soft text-[12.5px] font-semibold text-accent-soft-foreground"
-          >
-            {eventDateLabel(event)} · {event.time}
-          </Chip>
-          {event.kind && (
-            <span className="text-[12.5px] text-muted">{event.kind}</span>
-          )}
-        </div>
-        <div className="text-[16.5px] font-semibold leading-tight">
+      <PatternArt tone={toneFor(event.id)} className="h-[124px]">
+        <span className="absolute left-3.5 top-3.5 rounded-full bg-white/90 px-3 py-1.5 text-[12.5px] font-semibold text-foreground backdrop-blur">
+          {eventDateLabel(event)} · {event.time}
+        </span>
+        {event.kind && (
+          <span className="absolute bottom-3 left-3.5 rounded-full bg-black/25 px-2.5 py-1 text-[12px] font-medium text-white backdrop-blur">
+            {event.kind}
+          </span>
+        )}
+      </PatternArt>
+      <div className="flex flex-col gap-2 p-4">
+        <div className="font-display text-[19px] font-semibold leading-tight">
           {event.title}
         </div>
         <div className="text-[13px] text-muted">
@@ -57,7 +56,7 @@ function HomeEventCard({ event, myRsvp }: { event: Event; myRsvp?: Rsvp }) {
               Going
             </Chip>
           ) : (
-            <span className="rounded-[9px] bg-default px-2.5 py-1.5 text-[13px] font-semibold text-default-foreground">
+            <span className="rounded-full bg-accent px-3.5 py-1.5 text-[13px] font-semibold text-accent-foreground">
               RSVP
             </span>
           )}
@@ -91,7 +90,7 @@ export default function HomePage() {
   useOnboardingGuard();
   const online = useOnline();
   const [state] = useUserState();
-  const firstName = state.name.split(" ")[0] || "there";
+  const firstName = state.name.split(" ")[0];
   const initials = initialsOf(state.name) || "ML";
 
   const isEmpty = state.followedMasjidIds.length === 0;
@@ -102,30 +101,34 @@ export default function HomePage() {
 
   return (
     <div className="flex flex-1 flex-col">
-      <main className="flex flex-1 flex-col gap-5 overflow-y-auto px-4 pb-4 pt-1">
-        <header className="flex items-center gap-3">
-          <Avatar className="h-11 w-11 flex-none">
-            <AvatarFallback className="text-[15px] font-semibold">
-              {initials}
-            </AvatarFallback>
-          </Avatar>
-          <div className="flex min-w-0 flex-1 flex-col gap-px">
-            <span className="text-[13px] text-muted">Asalamu Alaykum</span>
-            <span className="text-[19px] font-semibold tracking-[-0.01em]">
-              {firstName}
-            </span>
-          </div>
-          <Link
-            href="/notifications"
-            aria-label="Notification settings"
-            className="relative flex h-11 w-11 items-center justify-center rounded-xl text-foreground"
-          >
-            <IconBell size={24} />
-            {/* Badge dot — shown while events are unread; mock */}
-            <span className="absolute right-[9px] top-[9px] h-[9px] w-[9px] rounded-full border-2 border-background bg-accent" />
-          </Link>
-        </header>
+      <main className="flex flex-1 flex-col overflow-y-auto pb-4">
+        <PatternArt className="rounded-b-[32px] px-5 pb-16 pt-6">
+          <header className="relative flex items-center gap-3.5">
+            <Avatar className="h-12 w-12 flex-none ring-2 ring-gold">
+              <AvatarFallback className="!bg-white/20 text-[16px] font-semibold !text-white">
+                {initials}
+              </AvatarFallback>
+            </Avatar>
+            <div className="flex min-w-0 flex-1 flex-col gap-px">
+              <span className="text-[13px] text-white/70">Asalamu Alaykum</span>
+              {firstName && (
+                <span className="font-display text-[24px] font-semibold leading-tight text-white">
+                  {firstName}
+                </span>
+              )}
+            </div>
+            <Link
+              href="/notifications"
+              aria-label="Notification settings"
+              className="relative flex h-11 w-11 items-center justify-center rounded-2xl bg-white/15 text-white backdrop-blur"
+            >
+              <IconBell size={22} />
+              <span className="absolute right-[10px] top-[10px] h-[9px] w-[9px] rounded-full border-2 border-[#16603a] bg-gold" />
+            </Link>
+          </header>
+        </PatternArt>
 
+        <div className="relative z-[1] -mt-11 flex flex-col gap-5 px-4">
         {!online && (
           <Alert status="warning">
             <Alert.Indicator />
@@ -169,15 +172,15 @@ export default function HomePage() {
           <>
         <section
           aria-label="Next salah"
-          className="flex items-center gap-3 rounded-2xl border border-border bg-surface px-3.5 py-3"
+          className="order-first flex items-center gap-3.5 rounded-3xl bg-background px-4 py-3.5 shadow-lift ring-1 ring-black/5"
         >
-          <span className="flex-none text-muted">
-            <IconClock size={20} />
+          <span className="flex h-11 w-11 flex-none items-center justify-center rounded-2xl bg-gold-soft text-gold-foreground">
+            <IconClock size={22} />
           </span>
           <div className="flex min-w-0 flex-1 flex-col gap-px">
-            <span className="text-[15.5px]">
-              <span className="font-semibold">Dhuhr 13:15</span>
-              <span className="text-muted"> · in 1 h 42 m</span>
+            <span className="font-display text-[19px] font-semibold leading-tight">
+              Dhuhr 13:15
+              <span className="font-sans text-[13px] font-medium text-accent"> · in 1 h 42 m</span>
             </span>
             <span className="text-[13px] text-muted">
               {masjid?.name} · {masjid && formatTravel(masjid)}
@@ -194,7 +197,7 @@ export default function HomePage() {
 
         <section aria-label="This week near you" className="flex flex-col gap-3">
           <div className="flex items-baseline justify-between">
-            <span className="text-[19px] font-semibold tracking-[-0.01em]">
+            <span className="font-display text-[22px] font-semibold">
               This week near you
             </span>
             <Link
@@ -216,6 +219,7 @@ export default function HomePage() {
         </section>
           </>
         )}
+        </div>
       </main>
       <TabBar active="home" />
     </div>

@@ -227,3 +227,21 @@ export function IconFacebook(props: IconProps) {
   );
 }
 
+
+export function IconBook(props: IconProps) {
+  return (
+    <svg {...base(props)}>
+      <path d="M4 5.5A1.5 1.5 0 0 1 5.5 4H11v15H5.5A1.5 1.5 0 0 0 4 20.5z" />
+      <path d="M20 5.5A1.5 1.5 0 0 0 18.5 4H13v15h5.5a1.5 1.5 0 0 1 1.5 1.5z" />
+    </svg>
+  );
+}
+
+export function IconPlay(props: IconProps) {
+  return (
+    <svg {...base(props)}>
+      <circle cx="12" cy="12" r="8.5" />
+      <path d="m10.2 8.8 5 3.2-5 3.2z" />
+    </svg>
+  );
+}

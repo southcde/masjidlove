@@ -90,7 +90,7 @@ function NotificationsScreen() {
           </Typography.Paragraph>
         </div>
 
-        <div className="flex flex-col overflow-hidden rounded-2xl border border-border bg-surface">
+        <div className="flex flex-col overflow-hidden rounded-3xl border border-black/5 shadow-premium bg-surface">
           <NotificationRow
             label="New events"
             description="When a masjid you follow posts something"

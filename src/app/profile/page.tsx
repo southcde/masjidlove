@@ -113,7 +113,7 @@ export default function ProfilePage() {
         </header>
 
         {editing && (
-          <div className="flex flex-col gap-3 rounded-2xl border border-border bg-surface p-4">
+          <div className="flex flex-col gap-3 rounded-3xl border border-black/5 shadow-premium bg-surface p-4">
             <TextField
               value={draft}
               onChange={setDraft}
@@ -152,7 +152,7 @@ export default function ProfilePage() {
           <SectionLabel action={{ href: "/explore", label: "Add" }}>
             Masjids you follow
           </SectionLabel>
-          <div className="overflow-hidden rounded-2xl border border-border bg-surface">
+          <div className="overflow-hidden rounded-3xl border border-black/5 shadow-premium bg-surface">
             {followed.length === 0 && (
               <div className="px-4 py-4 text-[14px] text-muted">
                 You’re not following any masjids yet.{" "}
@@ -186,7 +186,7 @@ export default function ProfilePage() {
 
         <section className="flex flex-col gap-2" aria-label="Your RSVPs">
           <SectionLabel>Your RSVPs</SectionLabel>
-          <div className="overflow-hidden rounded-2xl border border-border bg-surface">
+          <div className="overflow-hidden rounded-3xl border border-black/5 shadow-premium bg-surface">
             {rsvps.length === 0 && (
               <div className="px-4 py-4 text-[14px] text-muted">
                 Nothing yet.{" "}
@@ -232,7 +232,7 @@ export default function ProfilePage() {
 
         <section className="flex flex-col gap-2" aria-label="Settings">
           <SectionLabel>Settings</SectionLabel>
-          <div className="overflow-hidden rounded-2xl border border-border bg-surface">
+          <div className="overflow-hidden rounded-3xl border border-black/5 shadow-premium bg-surface">
             <Link href="/notifications?from=profile" className={rowClass}>
               <span className="flex-1 text-[15.5px] font-medium">Notifications</span>
               <span className="text-[13px] text-muted">

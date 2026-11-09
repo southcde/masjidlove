@@ -35,7 +35,7 @@ export default function AdminPage() {
             {masjid?.name} · {masjid?.area}
           </Typography.Paragraph>
         </div>
-        <div className="overflow-hidden rounded-2xl border border-border bg-surface">
+        <div className="overflow-hidden rounded-3xl border border-black/5 shadow-premium bg-surface">
           {ACTIONS.map(({ href, title, note, Icon }, index) => (
             <div key={href}>
               {index > 0 && <div className="ml-4 h-px bg-separator" />}

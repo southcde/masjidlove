@@ -80,8 +80,8 @@ export default function ExplorePage() {
             textValue={masjid.name}
             isDisabled={!published}
             onAction={() => router.push(`/masjid/${masjid.id}`)}
-            className={`flex items-center gap-3 px-4 py-3.5 outline-none ${
-              index > 0 ? "ml-4 border-t border-separator" : ""
+            className={`flex items-center gap-3 rounded-none px-4 py-3.5 outline-none ${
+              index > 0 ? "border-t border-separator" : ""
             } ${!published ? "opacity-55" : "data-[hovered=true]:bg-default"}`}
           >
             <div className="flex min-w-0 flex-1 flex-col gap-0.5">

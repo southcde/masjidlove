@@ -59,7 +59,7 @@ function EventRow({ event, myRsvp }: { event: Event; myRsvp?: Rsvp }) {
     <button
       type="button"
       onClick={() => router.push(`/events/${event.id}`)}
-      className="flex w-full items-center gap-3.5 rounded-2xl border border-border bg-background p-3.5 text-start shadow-[var(--surface-shadow)] active:bg-default"
+      className="flex w-full items-center gap-3.5 rounded-3xl border border-black/5 shadow-premium bg-background p-3.5 text-start shadow-[var(--surface-shadow)] active:bg-default"
     >
       <span
         className={`flex h-14 w-[52px] flex-none flex-col items-center justify-center rounded-xl ${

@@ -120,7 +120,7 @@ function FollowMasjidsScreen() {
             onSelectionChange={(keys) =>
               setSelectedIds(Array.from(keys as Set<string>))
             }
-            className="flex flex-col overflow-hidden rounded-2xl border border-border bg-surface"
+            className="flex flex-col overflow-hidden rounded-3xl border border-black/5 shadow-premium bg-surface"
           >
             {filtered.map((masjid, index) => {
               const isSelected = selectedIds.includes(masjid.id);

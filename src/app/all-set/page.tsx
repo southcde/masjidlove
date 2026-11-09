@@ -52,7 +52,7 @@ export default function AllSetPage() {
           </Typography.Paragraph>
         </div>
 
-        <div className="overflow-hidden rounded-2xl border border-border bg-surface">
+        <div className="overflow-hidden rounded-3xl border border-black/5 shadow-premium bg-surface">
           {events.map((event, index) => {
             const { weekday, day } = dayLabel(event.date);
             return (

@@ -78,7 +78,7 @@ export default function LocationPage() {
           </Typography.Paragraph>
         </div>
 
-        <div className="flex flex-col gap-3.5 rounded-2xl border border-border bg-surface p-4">
+        <div className="flex flex-col gap-3.5 rounded-3xl border border-black/5 shadow-premium bg-surface p-4">
           {PROMISES.map((promise) => (
             <div key={promise} className="flex items-start gap-3">
               <span className="mt-0.5 flex-none text-accent">
