@@ -108,7 +108,7 @@ function NotificationsScreen() {
           />
           <div className="ml-4 h-px bg-separator" />
           <NotificationRow
-            label="Jamaat time changes"
+            label="Salaah time changes"
             description="Only when a time actually moves"
             isSelected={prefs.jamaatChanges}
             onChange={(v) => set("jamaatChanges", v)}

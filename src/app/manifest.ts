@@ -1,10 +1,13 @@
 import type { MetadataRoute } from "next";
 
+// Required for the static (native) export.
+export const dynamic = "force-static";
+
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: "MasjidLuv",
-    short_name: "MasjidLuv",
-    description: "Find a masjid, see jamaat times, see what's happening.",
+    name: "MasjidLove",
+    short_name: "MasjidLove",
+    description: "Find a masjid, see salaah times, see what's happening.",
     start_url: "/",
     display: "standalone",
     background_color: "#ffffff",

@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import { RegisterServiceWorker } from "@/components/register-service-worker";
+import { NativeBoot } from "@/components/native-boot";
 import { ThemeApplier } from "@/components/theme-applier";
 
 // Runs before first paint so a saved dark theme never flashes light.
@@ -35,6 +36,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       <body className="flex min-h-full flex-col antialiased">
         <RegisterServiceWorker />
         <ThemeApplier />
+        <NativeBoot />
         <div className="app-frame flex flex-1 flex-col">{children}</div>
       </body>
     </html>

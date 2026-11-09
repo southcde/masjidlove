@@ -102,11 +102,11 @@ export default function CreateAccountPage() {
             isSelected={emailMe}
             onChange={setEmailMe}
             className="items-start"
-            aria-label="Email me when a masjid I follow posts an event or changes a jamaat time"
+            aria-label="Email me when a masjid I follow posts an event or changes a salaah time"
           >
             <span className="text-base leading-normal">
               Email me when a masjid I follow posts an event or changes a
-              jamaat time.
+              salaah time.
             </span>
           </Checkbox>
 

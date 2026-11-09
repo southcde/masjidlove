@@ -3,6 +3,7 @@
 import { useRouter } from "next/navigation";
 import { Button, Typography } from "@heroui/react";
 import { OnboardingScreen } from "@/components/onboarding/screen";
+import { getPosition } from "@/services/native";
 import { useUserState } from "@/hooks/use-user-state";
 import { IconCheck, IconLocate } from "@/components/icons";
 
@@ -16,25 +17,12 @@ export default function LocationPage() {
   const router = useRouter();
   const [, update] = useUserState();
 
-  function allowLocation() {
+  async function allowLocation() {
     // One-shot request at the point of need — never on load. With no
     // backend yet the result isn't stored; the flow continues either way.
-    if ("geolocation" in navigator) {
-      navigator.geolocation.getCurrentPosition(
-        () => {
-          update({ locationDenied: false });
-          router.push("/follow-masjids");
-        },
-        () => {
-          update({ locationDenied: true });
-          router.push("/follow-masjids");
-        },
-        { timeout: 10_000 }
-      );
-    } else {
-      update({ locationDenied: true });
-      router.push("/follow-masjids");
-    }
+    const position = await getPosition();
+    update({ locationDenied: position === null });
+    router.push("/follow-masjids");
   }
 
   return (
@@ -74,7 +62,7 @@ export default function LocationPage() {
           <Typography.Heading level={2}>Masjids near you</Typography.Heading>
           <Typography.Paragraph className="text-muted">
             Turn on location and we’ll sort masjids by how far you’d have to
-            walk, so the closest jamaat is always first.
+            walk, so the closest salaah is always first.
           </Typography.Paragraph>
         </div>
 

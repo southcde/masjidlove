@@ -18,6 +18,7 @@ import {
 } from "@/services/learning";
 import { getMasjid } from "@/services/masjids";
 import { IconChevronRight, IconClock, IconPlay } from "@/components/icons";
+import { classHref, courseHref, lessonHref } from "@/services/routes";
 
 const MODES = ["Courses", "In person"] as const;
 
@@ -88,7 +89,7 @@ export default function LearnPage() {
           <>
             {featured && (
               <Link
-                href={`/learn/course/${featured.course.id}/${nextLesson(featured.course, state.completedLessons).id}`}
+                href={lessonHref(featured.course.id, nextLesson(featured.course, state.completedLessons).id)}
                 className="block overflow-hidden rounded-3xl shadow-lift"
               >
                 <PatternArt tone="emerald" scene="book" className="flex flex-col gap-3 p-5 text-white">
@@ -125,7 +126,7 @@ export default function LearnPage() {
                 return (
                   <Link
                     key={course.id}
-                    href={`/learn/course/${course.id}`}
+                    href={courseHref(course.id)}
                     className="flex gap-3.5 rounded-3xl bg-background p-3 shadow-premium ring-1 ring-foreground/10 transition-transform active:scale-[0.99]"
                   >
                     <PatternArt
@@ -164,7 +165,7 @@ export default function LearnPage() {
                 {myClasses.map((session) => (
                   <Link
                     key={session.id}
-                    href={`/learn/class/${session.id}`}
+                    href={classHref(session.id)}
                     className="flex items-center gap-3 rounded-3xl bg-accent-soft p-4 ring-1 ring-accent/20"
                   >
                     <span className="flex h-11 w-11 flex-none items-center justify-center rounded-2xl bg-accent text-accent-foreground">
@@ -196,7 +197,7 @@ export default function LearnPage() {
                 return (
                   <Link
                     key={session.id}
-                    href={`/learn/class/${session.id}`}
+                    href={classHref(session.id)}
                     className="overflow-hidden rounded-3xl bg-background shadow-premium ring-1 ring-foreground/10 transition-transform active:scale-[0.99]"
                   >
                     <PatternArt tone={toneFor(session.id)} scene={sceneFor(session.title)} className="h-[84px]">

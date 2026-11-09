@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { haptic } from "@/services/native";
 import {
   IconBook,
   IconCalendar,
@@ -36,6 +37,7 @@ export function TabBar({ active }: { active: "home" | "explore" | "events" | "le
             <Link
               key={href}
               href={href}
+              onClick={() => void haptic("tap")}
               aria-current={isActive ? "page" : undefined}
               className={`flex h-[56px] min-w-0 flex-1 flex-col items-center justify-center gap-0.5 rounded-[22px] transition-colors ${
                 isActive

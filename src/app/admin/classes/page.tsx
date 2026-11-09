@@ -8,6 +8,7 @@ import { useAdmin } from "@/hooks/use-admin";
 import { DataTable, EmptyState, PageHeader, Panel, StatusPill, Td } from "@/components/admin/ui";
 import { classWhen, listAdminClasses, seatsLeft } from "@/services/learning";
 import type { ClassSession } from "@/types";
+import { adminClassEditHref, classHref } from "@/services/routes";
 
 export default function AdminClassesPage() {
   const { state, update, masjidId } = useAdmin();
@@ -57,7 +58,7 @@ export default function AdminClassesPage() {
             return (
               <tr key={c.id} className={c.cancelled ? "opacity-60" : ""}>
                 <Td>
-                  <Link href={`/learn/class/${c.id}`} className="font-medium hover:underline">
+                  <Link href={classHref(c.id)} className="font-medium hover:underline">
                     {c.title}
                   </Link>
                   <span className="block text-[12.5px] text-muted">{c.teacher}</span>
@@ -79,7 +80,7 @@ export default function AdminClassesPage() {
                 </Td>
                 <Td>
                   <div className="flex justify-end gap-1.5">
-                    <LinkButton href={`/admin/classes/${c.id}`} size="sm" variant="outline">
+                    <LinkButton href={adminClassEditHref(c.id)} size="sm" variant="outline">
                       Edit
                     </LinkButton>
                     <Button size="sm" variant="ghost" onPress={() => setCancelled(c.id, !c.cancelled)}>

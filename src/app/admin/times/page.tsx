@@ -18,6 +18,7 @@ import { useAdmin } from "@/hooks/use-admin";
 import { PageHeader, Panel } from "@/components/admin/ui";
 import { toMinutes } from "@/services/jamaat";
 import type { PrayerId } from "@/types";
+import { salaahHref } from "@/services/routes";
 
 const ROWS: { id: PrayerId; label: string }[] = [
   { id: "fajr", label: "Fajr" },
@@ -69,13 +70,13 @@ export default function AdminTimesPage() {
       },
       jamaatEditsWholeWeek: wholeWeek,
     });
-    router.push(`/masjid/${masjid?.id ?? "masjidul-quds"}/jamaat`);
+    router.push(salaahHref(masjid?.id ?? "masjidul-quds"));
   }
 
   return (
     <>
       <PageHeader
-        title="Jamaat times"
+        title="Salaah times"
         subtitle={`${masjid?.name} · this week`}
         actions={
           changed.length > 0 ? (

@@ -12,7 +12,7 @@ const EVENTS: Event[] = [
     kind: "Weekly",
     description:
       "Shaykh Ismail Londt continues the weekly tafsīr, working verse by verse through Sūrah Yūsuf this term. Everyone is welcome — seating for women upstairs. No registration, no charge. Tea afterwards in the courtyard.",
-    whenNote: "After Isha jamaat · about 45 min",
+    whenNote: "After Isha salaah · about 45 min",
     whereNote: "18 Duine Rd, Gatesville",
     goingCount: 42,
     maybeCount: 6,
@@ -54,7 +54,7 @@ const EVENTS: Event[] = [
     kind: "Weekly",
     description:
       "A practical walk-through of the janāzah prayer, washing and shrouding, led by the masjid's imams. Spaces are limited to keep the hall workable — please RSVP so we can prepare materials.",
-    whenNote: "After Maghrib jamaat · about 90 min",
+    whenNote: "After Maghrib salaah · about 90 min",
     goingCount: 31,
     maybeCount: 4,
     myRsvp: "cant-go",

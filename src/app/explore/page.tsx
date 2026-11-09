@@ -18,6 +18,7 @@ import { MasjidMap } from "@/components/app/masjid-map";
 import { MAP_ENABLED } from "@/config/map";
 import { useIsDark } from "@/hooks/use-is-dark";
 import { TabBar } from "@/components/app/tab-bar";
+import { getPosition } from "@/services/native";
 import { useUserState } from "@/hooks/use-user-state";
 import { formatTravel, listMasjids } from "@/services/masjids";
 import {
@@ -25,6 +26,7 @@ import {
   IconCalendar,
   IconLocate,
 } from "@/components/icons";
+import { masjidHref } from "@/services/routes";
 
 const FILTERS = ["Has events", "Following", "Jumuʿah"] as const;
 
@@ -43,13 +45,9 @@ export default function ExplorePage() {
     [masjids]
   );
 
-  function retryLocation() {
-    if (!("geolocation" in navigator)) return;
-    navigator.geolocation.getCurrentPosition(
-      () => update({ locationDenied: false }),
-      () => update({ locationDenied: true }),
-      { timeout: 10_000 }
-    );
+  async function retryLocation() {
+    const position = await getPosition();
+    update({ locationDenied: position === null });
   }
   const filtered = useMemo(() => {
     let list = masjids;
@@ -84,7 +82,7 @@ export default function ExplorePage() {
             id={masjid.id}
             textValue={masjid.name}
             isDisabled={!published}
-            onAction={() => router.push(`/masjid/${masjid.id}`)}
+            onAction={() => router.push(masjidHref(masjid.id))}
             className={`flex items-center gap-3 rounded-none px-4 py-3.5 outline-none ${
               index > 0 ? "border-t border-separator" : ""
             } ${!published ? "opacity-55" : "data-[hovered=true]:bg-default"}`}
@@ -143,7 +141,7 @@ export default function ExplorePage() {
           masjids={masjids}
           followedIds={state.followedMasjidIds}
           dark={isDark}
-          onSelect={(id) => router.push(`/masjid/${id}`)}
+          onSelect={(id) => router.push(masjidHref(id))}
         />
       ) : (
         <>

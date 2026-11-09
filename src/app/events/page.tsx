@@ -14,6 +14,7 @@ import {
   IconQuestion,
   IconX,
 } from "@/components/icons";
+import { eventHref } from "@/services/routes";
 
 const FILTERS = ["Upcoming", "Going", "Past"] as const;
 
@@ -58,7 +59,7 @@ function EventRow({ event, myRsvp }: { event: Event; myRsvp?: Rsvp }) {
   return (
     <button
       type="button"
-      onClick={() => router.push(`/events/${event.id}`)}
+      onClick={() => router.push(eventHref(event.id))}
       className="flex w-full items-center gap-3.5 rounded-3xl border border-foreground/10 bg-background p-3.5 text-start shadow-premium active:bg-default"
     >
       <span

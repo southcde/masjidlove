@@ -280,3 +280,12 @@ export function IconCalculator(props: IconProps) {
     </svg>
   );
 }
+
+export function IconShare(props: IconProps) {
+  return (
+    <svg {...base(props)}>
+      <path d="M12 15V4M8 7.5 12 3.5l4 4" />
+      <path d="M6 11H5.5A1.5 1.5 0 0 0 4 12.5v6A1.5 1.5 0 0 0 5.5 20h13a1.5 1.5 0 0 0 1.5-1.5v-6a1.5 1.5 0 0 0-1.5-1.5H18" />
+    </svg>
+  );
+}

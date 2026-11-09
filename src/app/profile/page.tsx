@@ -20,6 +20,7 @@ import { defaultUserState, initialsOf } from "@/types";
 import { getMasjid } from "@/services/masjids";
 import { getEvent } from "@/services/events";
 import { IconAdmin, IconCheck, IconChevronRight, IconQuestion } from "@/components/icons";
+import { eventHref, masjidHref } from "@/services/routes";
 
 const WEEKDAYS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
@@ -168,7 +169,7 @@ export default function ProfilePage() {
             {followed.map((masjid, index) => (
               <div key={masjid.id}>
                 {index > 0 && <div className="ml-4 h-px bg-separator" />}
-                <Link href={`/masjid/${masjid.id}`} className={rowClass}>
+                <Link href={masjidHref(masjid.id)} className={rowClass}>
                   <span className="flex min-w-0 flex-1 flex-col gap-px">
                     <span className="text-[15.5px] font-medium">{masjid.name}</span>
                     <span className="text-[13px] text-muted">{masjid.area}</span>
@@ -202,7 +203,7 @@ export default function ProfilePage() {
             {rsvps.map(({ event, rsvp }, index) => (
               <div key={event.id}>
                 {index > 0 && <div className="ml-4 h-px bg-separator" />}
-                <Link href={`/events/${event.id}`} className={rowClass}>
+                <Link href={eventHref(event.id)} className={rowClass}>
                   <span className="flex min-w-0 flex-1 flex-col gap-px">
                     <span className="text-[15.5px] font-medium">{event.title}</span>
                     <span className="text-[13px] text-muted">

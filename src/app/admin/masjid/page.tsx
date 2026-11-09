@@ -6,6 +6,7 @@ import { useAdmin } from "@/hooks/use-admin";
 import { PageHeader, Panel } from "@/components/admin/ui";
 import { PatternArt } from "@/components/app/pattern-art";
 import { LinkButton } from "@/components/link-button";
+import { masjidHref } from "@/services/routes";
 
 export default function AdminMasjidPage() {
   const { state, update, masjid, masjidId } = useAdmin();
@@ -38,7 +39,7 @@ export default function AdminMasjidPage() {
         title="Masjid profile"
         subtitle="What visitors see on your page."
         actions={
-          <LinkButton href={`/masjid/${masjidId}`} variant="outline">
+          <LinkButton href={masjidHref(masjidId)} variant="outline">
             View public page
           </LinkButton>
         }

@@ -14,6 +14,7 @@ import {
 } from "@heroui/react";
 import { Hydrated } from "@/components/app/hydrated";
 import { OnboardingScreen } from "@/components/onboarding/screen";
+import { haptic } from "@/services/native";
 import { useUserState } from "@/hooks/use-user-state";
 import {
   createDonation,
@@ -87,6 +88,7 @@ function GiveScreen() {
       monthly,
     });
     update({ donations: [...state.donations, donation] });
+    void haptic("success");
     router.push(`/support/thanks?id=${donation.id}`);
   }
 

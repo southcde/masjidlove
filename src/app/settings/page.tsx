@@ -14,6 +14,7 @@ import {
 } from "@heroui/react";
 import { OnboardingScreen } from "@/components/onboarding/screen";
 import { useOnboardingGuard } from "@/hooks/use-onboarding-guard";
+import { enablePush, getPosition } from "@/services/native";
 import { useUserState } from "@/hooks/use-user-state";
 import { defaultUserState, type TextSize, type ThemeChoice } from "@/types";
 import { IconChevronRight } from "@/components/icons";
@@ -81,19 +82,34 @@ export default function SettingsPage() {
   const router = useRouter();
   const [state, update] = useUserState();
   const [clearOpen, setClearOpen] = useState(false);
+  const [pushNote, setPushNote] = useState<string | null>(null);
   const { theme, textSize, reduceMotion } = state.settings;
 
   function setSetting(patch: Partial<typeof state.settings>) {
     update({ settings: { ...state.settings, ...patch } });
   }
 
-  function askLocation() {
-    if (!("geolocation" in navigator)) return;
-    navigator.geolocation.getCurrentPosition(
-      () => update({ locationDenied: false }),
-      () => update({ locationDenied: true }),
-      { timeout: 10_000 }
-    );
+  async function togglePush(on: boolean) {
+    setPushNote(null);
+    if (!on) {
+      update({ pushEnabled: false, pushToken: null });
+      return;
+    }
+    const result = await enablePush();
+    if (result.status === "granted") {
+      update({ pushEnabled: true, pushToken: result.token });
+    } else {
+      setPushNote(
+        result.status === "denied"
+          ? "Notifications are blocked. Turn them on in your phone’s settings."
+          : "Push notifications work in the mobile app."
+      );
+    }
+  }
+
+  async function askLocation() {
+    const position = await getPosition();
+    update({ locationDenied: position === null });
   }
 
   function clearData() {
@@ -194,6 +210,24 @@ export default function SettingsPage() {
             <span className="flex-1 text-[15.5px] font-medium">Notifications</span>
             <IconChevronRight size={16} />
           </Link>
+          <div className="h-px bg-separator" />
+          <Switch
+            isSelected={state.pushEnabled}
+            onChange={togglePush}
+            className="flex p-4"
+          >
+            <Switch.Content className="flex w-full items-center gap-3">
+              <div className="flex min-w-0 flex-1 flex-col gap-0.5">
+                <Label className="text-base font-medium">Push notifications</Label>
+                <Description className="text-sm leading-snug">
+                  {pushNote ?? "Reminders and salaah time changes on your phone"}
+                </Description>
+              </div>
+              <Switch.Control className="shrink-0">
+                <Switch.Thumb />
+              </Switch.Control>
+            </Switch.Content>
+          </Switch>
           <div className="h-px bg-separator" />
           <div className="flex min-h-[56px] items-center gap-3 px-4 py-2.5">
             <span className="flex min-w-0 flex-1 flex-col gap-px">

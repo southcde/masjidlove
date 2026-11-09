@@ -20,7 +20,7 @@ const NAV = [
   { href: "/admin", label: "Overview", Icon: IconHome, exact: true },
   { href: "/admin/events", label: "Events", Icon: IconCalendar },
   { href: "/admin/classes", label: "Classes", Icon: IconBook },
-  { href: "/admin/times", label: "Jamaat times", Icon: IconClock },
+  { href: "/admin/times", label: "Salaah times", Icon: IconClock },
   { href: "/admin/giving", label: "Giving", Icon: IconHeart },
   { href: "/admin/announcements", label: "Announcements", Icon: IconBell },
   { href: "/admin/masjid", label: "Masjid profile", Icon: IconAdmin },

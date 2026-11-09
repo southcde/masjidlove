@@ -21,6 +21,7 @@ import {
   IconClock,
   IconHeart,
 } from "@/components/icons";
+import { eventHref, masjidHref, salaahHref } from "@/services/routes";
 
 const WEEKDAYS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
@@ -35,7 +36,7 @@ function HomeEventCard({ event, myRsvp }: { event: Event; myRsvp?: Rsvp }) {
   const rsvp = myRsvp;
   return (
     <Link
-      href={`/events/${event.id}`}
+      href={eventHref(event.id)}
       className="block overflow-hidden rounded-3xl bg-background shadow-premium ring-1 ring-foreground/10 transition-transform active:scale-[0.99]"
     >
       <PatternArt tone={toneFor(event.id)} scene={sceneFor(event.title)} className="h-[124px]">
@@ -171,7 +172,7 @@ export default function HomePage() {
               Follow a masjid to see what’s on
             </h1>
             <p className="text-[15.5px] leading-snug text-muted">
-              Pick the masjid you pray at and its events and jamaat times land
+              Pick the masjid you pray at and its events and salaah times land
               here every day.
             </p>
             <LinkButton href="/explore" variant="primary" size="lg" fullWidth>
@@ -200,7 +201,7 @@ export default function HomePage() {
             </span>
           </div>
           <Link
-            href={`/masjid/${homeMasjidId}/jamaat`}
+            href={salaahHref(homeMasjidId)}
             className="flex items-center gap-0.5 text-[13.5px] font-medium text-accent"
           >
             All times
@@ -210,7 +211,7 @@ export default function HomePage() {
 
         {latestNotice && (
           <Link
-            href={`/masjid/${latestNotice.masjidId}`}
+            href={masjidHref(latestNotice.masjidId)}
             className="flex flex-col gap-1 rounded-3xl bg-gold-soft p-4 text-gold-foreground"
           >
             <span className="text-[11.5px] font-semibold uppercase tracking-wide">

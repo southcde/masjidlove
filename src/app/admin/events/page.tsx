@@ -8,6 +8,7 @@ import { useAdmin } from "@/hooks/use-admin";
 import { DataTable, EmptyState, PageHeader, Panel, StatusPill, Td } from "@/components/admin/ui";
 import { listAdminEvents } from "@/services/events";
 import type { Event } from "@/types";
+import { adminEventEditHref, eventHref } from "@/services/routes";
 
 export default function AdminEventsPage() {
   const { state, update, masjidId } = useAdmin();
@@ -52,7 +53,7 @@ export default function AdminEventsPage() {
           {events.map((e) => (
             <tr key={e.id} className={e.cancelled ? "opacity-60" : ""}>
               <Td>
-                <Link href={`/events/${e.id}`} className="font-medium hover:underline">
+                <Link href={eventHref(e.id)} className="font-medium hover:underline">
                   {e.title}
                 </Link>
                 {e.kind && <span className="block text-[12.5px] text-muted">{e.kind}</span>}
@@ -73,7 +74,7 @@ export default function AdminEventsPage() {
               </Td>
               <Td>
                 <div className="flex justify-end gap-1.5">
-                  <LinkButton href={`/admin/events/${e.id}`} size="sm" variant="outline">
+                  <LinkButton href={adminEventEditHref(e.id)} size="sm" variant="outline">
                     Edit
                   </LinkButton>
                   <Button

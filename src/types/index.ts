@@ -11,9 +11,9 @@ export type Masjid = {
   eventsThisWeek?: number;
   address?: string;
   phone?: string;
-  /** Today's five jamaat times, 24h */
+  /** Today's five salaah times, 24h */
   todayJamaat?: { fajr: string; dhuhr: string; asr: string; maghrib: string; isha: string };
-  /** Next jamaat's change note, e.g. "Dhuhr +15" */
+  /** Next salaah's change note, e.g. "Dhuhr +15" */
   timeChange?: { prayer: string; deltaMinutes: number; note: string };
 };
 
@@ -180,12 +180,15 @@ export type UserState = {
   bookings: Record<string, number>;
   /** Session ids the user is on the waitlist for */
   waitlist: string[];
-  /** Published jamaat edits for the admin's masjid, keyed by prayer id, "HH:MM" */
+  /** Published salaah-time edits for the admin's masjid, keyed by prayer id, "HH:MM" */
   jamaatEdits: Partial<Record<PrayerId, string>>;
   /** Whether the published edits apply to the whole week or only today */
   jamaatEditsWholeWeek: boolean;
   /** True when the user declined location; Explore falls back to areas */
   locationDenied: boolean;
+  /** Push notifications enabled (native app only) and the device token */
+  pushEnabled: boolean;
+  pushToken: string | null;
   settings: AppSettings;
   /** Giving history. Test mode: no payment provider is connected. */
   donations: Donation[];
@@ -222,6 +225,8 @@ export const defaultUserState: UserState = {
   jamaatEdits: {},
   jamaatEditsWholeWeek: true,
   locationDenied: false,
+  pushEnabled: false,
+  pushToken: null,
   settings: { theme: "system", textSize: "default", reduceMotion: false },
   donations: [],
   onboardingComplete: false,
